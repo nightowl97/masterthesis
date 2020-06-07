@@ -1,0 +1,89 @@
+\chapter{Modèles à circuits électriques pour les cellules PV}
+
+\section{Généralités}
+
+Fondamentalement, les cellules PV se composent de deux couches de semi-conducteurs à dopages différents, la jonction de ces deux couches étant exposée à la lumière incidente. En effet, les électrons dans la bande de conduction sont capables d'être transférés vers la bande de valence tant que l'énergie du photon incident $E = h \nu$ est supérieure à la largeur de la bande interdite $E_g = E_c - E_v$. Toute l'architecture d'une cellule quelconque vise à profiter le plus que possible de la différence de tension engendrée par les excitons séparés par le champ électrique dans la zone de déplétion (ou zone de charge d'espace) (figure \ref{fig:pn}). Par exemple, les contacts supérieurs sont des oxydes transparents conductifs (dit couche fenêtre) pour laisser passer le plus grand nombre de photons possible vers la couche absorbante de la cellule. Pour quelques cellule en couche mince, le contact arrière se compose d'une couche réfléchissante (ZnO et Ag ou Al) qui renvoie la lumière vers la couche absorbante pour minimiser davantage les pertes en lumière transmise \cite{Chopra2004}.\\
+En fait, le comportement électrique d'un telle cellule en l'absence de la lumière est identique à celui d'une diode PN classique dont la caractéristique est décrite par l'équation de Shockley (équation \ref{eq:shockley}). Dans cette formule, le $I_0$ est le courant de saturation de la diode, $q$ la charge élémentaire $e^{-}$, $a$ le facteur d'idéalité, $k$ la constante de Boltzmann et $T$ la température de la cellule. Parfois on utilise la notion de \textit{voltage thermique}: $V_t = \frac{kT}{q}$.
+\begin{equation}
+\label{eq:shockley}
+  I_D = I_0 \bigg[e^{\big(\frac{qV}{akT}\big)} - 1\bigg]
+\end{equation}
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=.7\textwidth]{resources/pn.PNG}
+    \caption{Schéma d'une jonction PN représentant : la zone de charge d'espace
+(ZCE), les zones quasi-neutres (ZQN), les différents porteurs de charge, les sites dopants et le champ électrique E - Roger, 2013 \cite{Roger2013}.}
+    \label{fig:pn}
+  \end{center}
+\end{figure}
+
+Bien que ces modèles d'éléments localisé sont efficaces et précis pour les cellules de première génération et celles en couches minces, il existe aujourd'hui plusieurs technologies émergentes qui n'utilisent pas le champs électrique de la zone de déplétion pour la séparation des charges, et utilisent d'autre mécanismes et sources de champ électrique comme par la divergence positive de la polarisation $\nabla \cdot \bf{P} \neq 0$ qui crée un déséquilibre de charges aux parois de domaines à polarisation différentes sein des matériaux ferroélectriques \cite{Huang2010}. Pour ce genre de technologies, il est toujours difficile de concevoir un modèle de diode pour simuler le comportement complexe de ces cellules.
+
+\subsection{Modèles à simple diode}
+
+Avec la présence de la lumière, les photons assez énergétique permettent la création des paires électron-trous qui, à leur tour, créent une différence de potentiel à travers la jonction. Une partie de ces porteurs de charge se recombine, mais l'autre se diffuse à travers les contacts de la cellule, ce qui donne naissance à un \textit{photo-courant} $I_{PV}$ (ou $I_L$) dont la valeur dépend de l'intensité de la lumière incidente.\\
+En ajoutant le photo-courant $I_{PV}$ à l'équation de Shockley \ref{eq:idealmodeleq}, on retrouve un modèle élémentaire qui décrit une cellule idéale, composé d'une source de courant connectée à une diode en parallèle (figure \ref{fig:idealcell}). Évidemment ce modèle est complètement décrit par trois paramètres: \textit{(i)} Le photo-courant $I_{PV}$, \textit{(ii)} le facteur d'idéalité de la diode $a$ et \textit{(iii)} son courant de saturation $I_0$. 
+\begin{equation}
+\label{eq:idealmodeleq}
+  I = I_{PV} - I_0 \bigg[e^{\big(\frac{qV}{akT}\big)} - 1\bigg]
+\end{equation}
+
+On voit dans la figure \ref{fig:idealcell}.b que la courbe caractéristique connue de la cellule se forme par une translation verticale par $I_{PV}$ d'une part, et de la forme exponentielle de la diode de l'autre. Le facteur la courbure dans la région du point de puissance maximale est déterminée par le facteur d'idéalité de la diode.
+
+\begin{figure*}[t!]
+  \centering
+  \begin{subfigure}[t]{0.3\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{resources/idealcell.png}
+      \caption{Modèle d'une cellule idéale}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[t]{0.65\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{resources/superp.png}
+      \caption{Le courant I est la superposition de $I_{PV}$ et de $I_D$ \cite{Villalva2009}}
+  \end{subfigure}
+  \caption{Modèle idéal d'une cellule PV}
+  \label{fig:idealcell}
+\end{figure*}
+
+\section{Les modèles simple diode $R_S$ et $R_P$}
+Le modèle idéal précèdent est utile pour éclaircir le concept de la modélisation par circuits d'éléments localisés. Dans la pratique, et pour plus de précision, il est nécessaire de considérer les pertes ohmique de la cellule dans le matériau semi-conducteur utilisé et dans les contacts des électrodes. La manière la plus directe de modéliser ces phénomènes est de tout simplement ajouter une résistance en série $R_S$ au circuit idéal. Ceci nous laisse avec la relation modifiée \ref{eq:singlers} du modèle dit \textit{"simple diode-$R_S$"} qui a besoin de 4 paramètres pour une description complète: $I_{PV}$, $a$, $I_0$ et $R_S$.\\
+L'une des limites de ce modèle provient de son imprécision lorsque la cellule subit des variations négligeables de température. L'insertion d'une résistance shunt permet d'améliorer la sensibilité du modèle aux variations de température, et en même temps de considérer tout courant de fuite pouvant traverser la jonction \cite{Chin2015b}. On se retrouve cette fois avec les 5 paramètres du modèle dit \textit{"simple diode-$R_P$"} ou tout simplement \textit{"simple diode"}: $I_0$, $I_{PV}$, $a$, $R_s$ et $R_P$. La relation entre ces paramètres est décrite par l'équation \ref{eq:single}. Ce modèle offre un compromis entre la simplicité et la précision et par conséquent est très largement testé et utilisé dans la littérature \cite{Carrero2007}. Le diagramme du circuit de ce modèle est présenté dans la figure \ref{fig:single}.
+
+\begin{equation}
+  \label{eq:singlers}
+  I = I_{PV} - I_0 \bigg[e^{\big(\frac{q(V + RS)}{akT}\big)} - 1\bigg]
+\end{equation}
+
+\begin{equation}
+  \label{eq:single}
+  I = I_{PV} - I_0 \bigg[e^{\big(\frac{q(V + RS)}{akT}\big)} - 1\bigg] - \frac{V + I R_S}{R_P}
+\end{equation}
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=.5\textwidth]{resources/eqcirc.png}
+    \caption{Modèle Simple Diode}
+    \label{fig:single}
+  \end{center}
+\end{figure}
+
+\section{Modèle double diode}
+
+Jusque là on a graduellement amélioré la performance et la précision des modèles de cellules PV en considérant de plus en plus de phénomènes physique qui se produisent dans la cellule (pertes ohmiques, effets des variations de température et courants de fuites). Un phénomène potentiellement influent qui n'est pas considéré par le modèle simple diode est celui des recombinaisons. Comme son nom l'indique, le modèle \textit{"double diodes"} (figure \ref{fig:doublediode} n'est que qu'un modèle simple diode auquel on ajoute une autre diode en shunt pour mieux modéliser les effets de recombinaisons surtout aux conditions d'illumination faible \cite{Chin2015b}.\\
+Il est évident que l'addition d'une autre diode complique considérablement le modèle et on se retrouve avec deux paramètres supplémentaires ($I_{PV}$, $I_{01}$, $I_{02}$, $a1$, $a2$, $R_S$ et $R_P$). Toutefois, dans les cas où la complexité des calculs associés n'est pas contraignante, la précision de se modèle est supérieure. L'équation \ref{eq:doublediode} décrit la relation entre les 7 paramètres du modèle.
+\begin{equation}
+  \label{eq:doublediode}
+  I = I_{PV} - I_{01} \bigg[e^{\big(\frac{q(V + RS)}{a_1kT}\big)} - 1\bigg] - I_{02} \bigg[e^{\big(\frac{q(V + RS)}{a_2kT}\big)} - 1\bigg] - \frac{V + I R_S}{R_P}
+\end{equation}
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=.5\textwidth]{resources/doublediode.png}
+    \caption{Le modèle double diode}
+    \label{fig:doublediode}
+  \end{center}
+\end{figure}
+
+\section{Méthodes d'extraction et estimation des paramètres}

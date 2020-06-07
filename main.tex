@@ -1,0 +1,45 @@
+\documentclass[french, 12pt, twoside, openright]{report}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[hidelinks]{hyperref}
+\usepackage{graphicx} %remove demo for final version
+\usepackage{siunitx}
+\usepackage{floatrow}
+\usepackage{xcolor}
+\usepackage{subcaption}
+
+
+%TIMES NEW ROMAN FONT
+\usepackage{mathptmx}
+%\usepackage{charter}
+
+\usepackage[margin=2.5cm]{geometry}
+
+%check font size
+\makeatletter
+\newcommand\thefontsize{The current font size is: \f@size pt} 
+\makeatother
+%to set chapter and section title font sizes
+\usepackage{sectsty}
+\chapterfont{\fontsize{16}{18}\selectfont}
+\sectionfont{\fontsize{14}{16}\selectfont}
+\subsectionfont{\fontsize{14}{16}\selectfont}
+
+%BLUE COLOR
+\definecolor{blue}{HTML}{00578a}
+
+\setcounter{tocdepth}{3}
+
+\begin{document}
+  \include{titlepage}
+  \include{introduction}
+  \include{chapter1}
+  \include{chapter2}
+  \bibliographystyle{ieeetr}
+  \bibliography{masterlibrary}
+\end{document}
