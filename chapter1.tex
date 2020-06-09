@@ -3,11 +3,6 @@
 \section{Généralités}
 
 Fondamentalement, les cellules PV se composent de deux couches de semi-conducteurs à dopages différents, la jonction de ces deux couches étant exposée à la lumière incidente. En effet, les électrons dans la bande de conduction sont capables d'être transférés vers la bande de valence tant que l'énergie du photon incident $E = h \nu$ est supérieure à la largeur de la bande interdite $E_g = E_c - E_v$. Toute l'architecture d'une cellule quelconque vise à profiter le plus que possible de la différence de tension engendrée par les excitons séparés par le champ électrique dans la zone de déplétion (ou zone de charge d'espace) (figure \ref{fig:pn}). Par exemple, les contacts supérieurs sont des oxydes transparents conductifs (dit couche fenêtre) pour laisser passer le plus grand nombre de photons possible vers la couche absorbante de la cellule. Pour quelques cellule en couche mince, le contact arrière se compose d'une couche réfléchissante (ZnO et Ag ou Al) qui renvoie la lumière vers la couche absorbante pour minimiser davantage les pertes en lumière transmise \cite{Chopra2004}.\\
-En fait, le comportement électrique d'un telle cellule en l'absence de la lumière est identique à celui d'une diode PN classique dont la caractéristique est décrite par l'équation de Shockley (équation \ref{eq:shockley}). Dans cette formule, le $I_0$ est le courant de saturation de la diode, $q$ la charge élémentaire $e^{-}$, $a$ le facteur d'idéalité, $k$ la constante de Boltzmann et $T$ la température de la cellule. Parfois on utilise la notion de \textit{voltage thermique}: $V_t = \frac{kT}{q}$.
-\begin{equation}
-\label{eq:shockley}
-  I_D = I_0 \bigg[e^{\big(\frac{qV}{akT}\big)} - 1\bigg]
-\end{equation}
 
 \begin{figure}
   \begin{center}
@@ -16,11 +11,18 @@ En fait, le comportement électrique d'un telle cellule en l'absence de la lumi�
 (ZCE), les zones quasi-neutres (ZQN), les différents porteurs de charge, les sites dopants et le champ électrique E - Roger, 2013 \cite{Roger2013}.}
     \label{fig:pn}
   \end{center}
-\end{figure}
+\end{figure}  
+
+En fait, le comportement électrique d'un telle cellule en l'absence de la lumière est identique à celui d'une diode PN classique dont la caractéristique est décrite par l'équation de Shockley (équation \ref{eq:shockley}). Dans cette formule, le $I_0$ est le courant de saturation de la diode, $q$ la charge élémentaire $e^{-}$, $a$ le facteur d'idéalité, $k$ la constante de Boltzmann et $T$ la température de la cellule. Parfois on utilise la notion de \textit{voltage thermique}: $V_t = \frac{kT}{q}$.
+
+\begin{equation}
+\label{eq:shockley}
+  I_D = I_0 \bigg[e^{\big(\frac{qV}{akT}\big)} - 1\bigg]
+\end{equation}
 
 Bien que ces modèles d'éléments localisé sont efficaces et précis pour les cellules de première génération et celles en couches minces, il existe aujourd'hui plusieurs technologies émergentes qui n'utilisent pas le champs électrique de la zone de déplétion pour la séparation des charges, et utilisent d'autre mécanismes et sources de champ électrique comme par la divergence positive de la polarisation $\nabla \cdot \bf{P} \neq 0$ qui crée un déséquilibre de charges aux parois de domaines à polarisation différentes sein des matériaux ferroélectriques \cite{Huang2010}. Pour ce genre de technologies, il est toujours difficile de concevoir un modèle de diode pour simuler le comportement complexe de ces cellules.
 
-\subsection{Modèles à simple diode}
+%\subsection{Modèles à simple diode}
 
 Avec la présence de la lumière, les photons assez énergétique permettent la création des paires électron-trous qui, à leur tour, créent une différence de potentiel à travers la jonction. Une partie de ces porteurs de charge se recombine, mais l'autre se diffuse à travers les contacts de la cellule, ce qui donne naissance à un \textit{photo-courant} $I_{PV}$ (ou $I_L$) dont la valeur dépend de l'intensité de la lumière incidente.\\
 En ajoutant le photo-courant $I_{PV}$ à l'équation de Shockley \ref{eq:idealmodeleq}, on retrouve un modèle élémentaire qui décrit une cellule idéale, composé d'une source de courant connectée à une diode en parallèle (figure \ref{fig:idealcell}). Évidemment ce modèle est complètement décrit par trois paramètres: \textit{(i)} Le photo-courant $I_{PV}$, \textit{(ii)} le facteur d'idéalité de la diode $a$ et \textit{(iii)} son courant de saturation $I_0$. 
@@ -86,4 +88,10 @@ Il est évident que l'addition d'une autre diode complique considérablement le 
   \end{center}
 \end{figure}
 
-\section{Méthodes d'extraction et estimation des paramètres}
+\section{Influence des paramètres des modèles}
+
+\section{Estimation des paramètres}
+
+Les paramètres (soit les valeurs des éléments localisés des circuits) représentent une description complète du modèle et une bonne estimation de leurs valeurs est essentielle avant leur application. On utilise souvent les données des data-sheets offertes par les fabricants des cellules et modules PV. Ces données couvrent les points clés de la caractéristique I-V (court-circuit, circuit ouvert et puissance maximale). Les méthodes analytiques tendent à utiliser ces informations en plus de quelques expressions comme la pente de la courbe aux points clés pour déterminer les résistances en shunt $R_P$ et en série $R_S$. On trouve souvent aussi des simplifications comme le fait de considérer que seuls les $I_{PV}$ et $I_0$ sont significativement influents sur la caractéristique \cite{Ciulla2014}.
+Dans le modèle simple diode contenant les 5 paramètres $I_{PV}$, $I_0$, $a$, $R_S$ et $R_P$, il est très courant de tout simplement négliger $I_0$ devant $I_{PV}$ au point court circuit, et par conséquent considérer que $I_{PV} = I_{CC}$ (La valeur de $I_0$ est ensuite extraite des conditions circuit ouvert) \cite{Villalva2009,Ciulla2014,Tsai2008}. En ce qui concerne $a$, $R_S$ et $R_P$, on a besoin de davantage d'équations. Généralement, les chercheurs utilisent soit les dérivées de la caractéristique aux points clés, soit des expressions analytiques des coefficients de température le liant avec les paramètres.\\
+Le problème étant de nature non-linéaire, les techniques d'optimisation avec des capabilités de recherche globales dans l'espace de recherche s'offrent comme alternative. La précision de ces techniques dépends évidemment de la fonction objectif considérée, des conditions initiales et de la nature de l'algorithme lui-même \cite{Easwarakhanthan1986b, El-Naggar2012, DaCosta2010}. Les techniques de calcul souple et les algorithmes évolutionnistes ont susciter beaucoup d'intérêt récemment dans la littérature dans le but d'estimer les paramètres des cellules PV. Des techniques de réseaux de neurones artificiels [94, 98, 94], logique floue [109, 110, 111], algorithme génétique [76, 77 113], optimisation par essaims particulaires (Particle Swarm Optimization) [81, 115, 83] et évolution différentielle \cite{DaCosta2010, Ishaque2012, Gong2013} ont été utilisées. Par contre elles ne sont pas utilisées par les simulateurs PV, qui sont contraints par des critères de consistance et de temps de calcul, à cause de leurs nature stochastique. Ceci dit, elles sont très utiles lorsqu'il y a un besoin de précision sur les paramètres pour servir à l'optimisation du processus de fabrication ou pour l'étude de dégradation des cellules \cite{Ikegami2001,Balzani2005}. Dans les chapitres suivants nous allons présenter et analyser une méthode utilisant l'algorithme d'évolution différentielle qui est relativement récente en la comparant avec d'autre algorithmes similaires.
