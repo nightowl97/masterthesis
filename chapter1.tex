@@ -1,6 +1,7 @@
 \chapter{Modèles à circuits électriques pour les cellules PV}
 
 \section{Introduction}
+Dans ce chapitre, nous parlerons des circuit électriques à éléments localisés qui sont utilisés pour la modélisation des cellules PV. Plus précisément, on discutera les modèles simple et double diode, les rôles et l'influence de chaque paramètre sur le modèle et finalement les techniques utilisées dans la littérature pour l'identification et l'estimation de ces paramètres.
 
 \section{Généralités}
 
@@ -66,8 +67,8 @@ On voit dans la figure \ref{fig:idealcell}.b que la courbe caractéristique conn
 \end{figure*}
 
 \section{Les modèles simple diode \texorpdfstring{$R_S\ \text{et}\ R_P$}{Rs et Rp}}
-Le modèle idéal précèdent est utile pour éclaircir le concept de la modélisation par circuits d'éléments localisés. Dans la pratique, et pour plus de précision, il est nécessaire de considérer les pertes ohmique de la cellule dans le matériau semi-conducteur utilisé et dans les contacts des électrodes. La manière la plus directe de modéliser ces phénomènes est de tout simplement ajouter une résistance en série $R_S$ au circuit idéal. Ceci nous laisse avec la relation modifiée \ref{eq:singlers} du modèle dit \textit{"simple diode-$R_S$"} qui a besoin de 4 paramètres pour une description complète: $I_{PV}$, $a$, $I_0$ et $R_S$.\\
-L'une des limites de ce modèle provient de son imprécision lorsque la cellule subit des variations négligeables de température. L'insertion d'une résistance shunt permet d'améliorer la sensibilité du modèle aux variations de température, et en même temps de considérer tout courant de fuite pouvant traverser la jonction \cite{Chin2015b}. On se retrouve cette fois avec les 5 paramètres du modèle dit \textit{"simple diode-$R_P$"} ou tout simplement \textit{"simple diode"}: $I_0$, $I_{PV}$, $a$, $R_s$ et $R_P$. La relation entre ces paramètres est décrite par l'équation \ref{eq:single}. Ce modèle offre un compromis entre la simplicité et la précision et par conséquent est très largement testé et utilisé dans la littérature \cite{Carrero2007}. Le diagramme du circuit de ce modèle est présenté dans la figure \ref{fig:single}.
+Le modèle idéal précèdent est utile pour éclaircir le concept de la modélisation par circuits d'éléments localisés. Par contre, dans la pratique, et pour plus de précision, il est nécessaire de considérer les pertes ohmique de la cellule dans le matériau semi-conducteur utilisé et dans les contacts des électrodes. La manière la plus directe de modéliser ces phénomènes est de tout simplement ajouter une résistance en série $R_S$ au circuit idéal. Ceci nous laisse avec la relation modifiée \ref{eq:singlers} du modèle dit \textit{"simple diode-$R_S$"} qui a besoin de 4 paramètres pour une description complète: $I_{PV}$, $a$, $I_0$ et $R_S$.\\
+L'une des limites de ce modèle provient de son imprécision lorsque la cellule subit des variations non-négligeables de température. L'insertion d'une résistance shunt permet d'améliorer la sensibilité du modèle aux variations de température et en même temps de considérer tout courant de fuite pouvant traverser la jonction \cite{Chin2015b}. On se retrouve cette fois avec les 5 paramètres du modèle dit \textit{"simple diode-$R_P$"} ou tout simplement \textit{"simple diode"}: $I_0$, $I_{PV}$, $a$, $R_s$ et $R_P$. La relation entre ces paramètres est décrite par l'équation \ref{eq:single}. Ce modèle offre un compromis entre la simplicité et la précision et par conséquent est très largement testé et utilisé dans la littérature \cite{Carrero2007}. Le diagramme du circuit de ce modèle est présenté dans la figure \ref{fig:single}.
 
 \begin{equation}
   \label{eq:singlers}
@@ -101,13 +102,15 @@ L'une des limites de ce modèle provient de son imprécision lorsque la cellule 
 
 \section{Modèle double diode}
 
-Jusque là on a graduellement amélioré la performance et la précision des modèles de cellules PV en considérant de plus en plus de phénomènes physique qui se produisent dans la cellule (pertes ohmiques, effets des variations de température et courants de fuites). Un phénomène potentiellement influent qui n'est pas considéré par le modèle simple diode est celui des recombinaisons. Comme son nom l'indique, le modèle \textit{"double diodes"} (figure \ref{fig:doublediode} n'est que qu'un modèle simple diode auquel on ajoute une autre diode en shunt pour mieux modéliser les effets de recombinaisons surtout aux conditions d'illumination faible \cite{Chin2015b}.\\
+Jusque là on a graduellement amélioré la performance et la précision des modèles de cellules PV en considérant de plus en plus de phénomènes physique qui se produisent dans la cellule (pertes ohmiques, effets des variations de température et courants de fuites). Un phénomène potentiellement influent qui n'est pas considéré par le modèle simple diode est celui des recombinaisons. Comme son nom l'indique, le modèle \textit{"double diode"} (figure \ref{fig:doublediode} n'est que qu'un modèle simple diode auquel on ajoute une autre diode en shunt pour mieux modéliser les effets de recombinaisons surtout aux conditions d'illumination faible \cite{Chin2015b}.\\
 Il est évident que l'addition d'une autre diode complique considérablement le modèle et on se retrouve avec deux paramètres supplémentaires ($I_{PV}$, $I_{01}$, $I_{02}$, $a1$, $a2$, $R_S$ et $R_P$). Toutefois, dans les cas où la complexité des calculs associés n'est pas contraignante, la précision de se modèle est supérieure. L'équation \ref{eq:doublediode} décrit la relation entre les 7 paramètres du modèle.
+
 \begin{equation}
   \label{eq:doublediode}
   I = I_{PV} - I_{01} \bigg[e^{\big(\frac{q(V + RS)}{a_1kT}\big)} - 1\bigg] - I_{02} \bigg[e^{\big(\frac{q(V + RS)}{a_2kT}\big)} - 1\bigg] - \frac{V + I R_S}{R_P}
 \end{equation}
-\begin{figure}
+
+\begin{figure}[b]
   \begin{center}
     \shorthandoff{:!}
     \resizebox{.5\textwidth}{!}{
@@ -133,7 +136,7 @@ Pour la résistance shunt $R_P$, sa diminution conduit à un détournement d'un 
 
 L'équation de Shockley (équation \ref{eq:shockley}) est en fait retrouvée en négligeant toute recombinaison des porteurs de charges dans la zone de déplétion. Dans les diodes et les transistors réels, on constate une différence entre les courbes I-V et le modèle de Shockley \cite{Shockley1949}. Effectivement, le facteur d'idéalité modélise cette déviation du cas idéal. Une diode idéale est marquée par un facteur d'idéalité $a = 1$ alors qu'une diode où les évènements de recombinaison dominent dans la zone de déplétion est marquée par $a = 2$. EXPLAIN WHY Voc DECREASES + SAT CURRENT
 
-\begin{figure*}
+\begin{figure*}[h]
   \begin{subfigure}[b]{.48\textwidth}
     \begin{center}
       \includegraphics[width=\textwidth]{resources/rsinf.png}
@@ -151,7 +154,7 @@ L'équation de Shockley (équation \ref{eq:shockley}) est en fait retrouvée en 
   \label{fig:rinf}
 \end{figure*}
 
-\begin{figure*}
+\begin{figure*}[h]
   \begin{subfigure}[b]{0.48\textwidth}
     \begin{center}
       \includegraphics[width=\textwidth]{resources/ainf.png}
