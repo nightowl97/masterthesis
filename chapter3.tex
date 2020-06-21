@@ -35,10 +35,10 @@ def objf(vecteur, exp_v, exp_i):
         rs, rp = vecteur[0], vecteur[1]
         if rs < 0 or rp < 0:
                 return 100 # Valeur fitness large
-        ical = i_from_vect(vector, exp_vol) # Une fonction quelconque donnant le caracteristique IV du vecteur
+        ical = i_from_vect(vector, exp_vol) # Une fonction donnant la caracteristique IV de "vector"
         erreur = ical - exp_i
         
-        return np.sqrt(np.mean(erreur ** 2)) # racine de l'erreur moyenne quadratique  
+        return np.sqrt(np.mean(erreur ** 2)) # RMSE  
 \end{python}
 
 Les équations de modèles simple et double diode (équations \ref{eq:single}, \ref{eq:doublediode}, respectivement) sont transcendantes, il est donc impossible d'extraire directement le courant à partir de la tension et des paramètres (Le courant $I$ figure simultanément dans le premier membre et dans l'exponentiel du second). Ainsi, il n'est pas trivial de remplir la fonction de \pyth{i_from_vect(vector, exp_vol)}. Plusieurs méthodes on été utilisées initialement avec des approches d'approximation analytique ou itérative \cite{Shur1991,AbuelmaAtti1992,Datta1992}. Ces méthodes sont approximatives mais permettent de trouver la solution explicitement avec des fonctions élémentaires (Développement Taylor par exemple). Dans notre cas, on fait recours à la méthode de Jain et Kapoor (2004) \cite{Jain2004, Lun2015} qui utilisent la fonction W de Lambert pour une solution analytique exacte de ces équations.
@@ -46,7 +46,7 @@ Les équations de modèles simple et double diode (équations \ref{eq:single}, \
 \subsection{Définition}
 La "\textit{fonction W}" de Lambert est définie comme l'inverse de la fonction $w \rightarrow f(w) =  w e^w$, où $w = W_k(z)\ |\ z \in \mathbb{C}$. La fonction $f$ n'étant pas surjective, la fonction $W_k(z)$ est donc \textit{multivaluée} et comprends plusieurs branches indexées par $k$ ($W_0$ est choisie comme branche principale). Si $x \in \mathbb{R}$, donc pour $-1/e \leq x < 0$, il existe deux valeurs réelles possible de $W(x)$ (figure \ref{fig:lambertw}).
 
-\begin{figure}
+\begin{figure} 
   \begin{center}
     \includegraphics[width=.6\textwidth]{resources/lambertw.png}
     \caption{Les deux branches réelles de $W(x)$ lorsque $x$ est réel}
@@ -66,10 +66,10 @@ Un exemple basique de l'utilisation de cette méthode en Python est le suivant:
 
 \begin{python}[basicstyle=\tiny]
 import numpy as np 
-from scipy.special import lambertw #la bibliotheque scipy fourni la fonction W
+from scipy.special import lambertw # scipy fournit la fonction W
 
 z = np.linspace(-1/np.e, 3, 1000) # evaluons W entre -1/e et 3
-w0 = lambertw(z, 0)
+w0 = lambertw(z, 0) # choisir la branche principale
 \end{python}
 
 \subsection{Résolution de modèles simple et double diode par la fonction W}
@@ -78,7 +78,7 @@ De la définition de la fonction W, la solution d'une équation $xe^x = a$ est $
   \label{eq:lambertwsingle}
   I = \frac{R_{sh}(I_0 + I_{PV}) - V}{R_s + R_{sh}} - \frac{W\left(\frac{R_s I_0 R_{sh}}{a V_{th}(R_s + R_{sh})}e^{\left(\frac{R_{sh}(R_s I_{PV} + R_s I_0 + V)}{a V_{th} (R_s + R_{sh})}\right)}\right)aV_{th}}{R_s}
 \end{equation}
-On remarque bien que le second membre ne contient nul part un terme de courant $I$. Il faut noter aussi que le terme de la fonction $W$ est sous risque d'un dépassement et de retourner de valeurs infinies. Pour des raisons de stabilité numérique on utilise la notion de \textit{Conductance Shunt}: $C_{sh} = \frac{1}{R_{sh}}$ car cette résistance prend souvent de valeurs $\gg 1$ ce qui entraîne un risque de divergence des calculs.
+On remarque bien que le second membre ne contient nul part un terme de courant $I$. Il faut noter aussi que le terme de la fonction $W$ est sous risque d'un dépassement et de retourner de valeurs infinies. Pour des raisons de stabilité numérique on utilise la notion de \textit{Conductance Shunt}: $C_{sh} = \frac{1}{R_{sh}}$ car cette résistance prend souvent de valeurs $\gg 1$ ce qui entraîne un risque de divergence des calculs. On trouve souvent des valeurs larges de résistance shunt, ce qui explique l'existence dans la littérature de plusieurs modèles utilisant la simplification $R_{sh} = + \infty$. Avec la substitution de la conductance shunt, si $R_{sh}\rightarrow\infty$ alors $C_{sh} \rightarrow 0$ ce qui assure la stabilité du calcul numérique.
 
 Le modèle double diodes (équation \ref{eq:doublediode}) contient un terme exponentiel pour chaque diode. De la même manière que Jain et Kapoor on retrouve explicitement l'expression du courant avec deux termes de la fonction $W$ (equation \ref{eq:lambertwdouble}).
 \begin{equation}
@@ -91,5 +91,119 @@ Le modèle double diodes (équation \ref{eq:doublediode}) contient un terme expo
 \end{equation}
 
 \section{Résultats}
+
+\subsection{Configuration de l'Évolution Différentielle}
+Pour appliquer l'Évolution Différentielle avec succès sur les modèles à diodes, il faut savoir choisir les bonnes valeurs de paramètres de contrôle $CR, F \text{et}\  N_P$. Il n'existe pas de règle stricte mais Storn et Price \cite{Price2005} donnent quelques indications. En ce qui concerne le facteur de mutation $F$, les valeurs $F \geq 1$ ne sont pas fiables et souvent convergent très lentement par rapport aux $F < 1$. Cependant, Zaharie (2002) \cite{Zaharie2002} constate une borne inférieure de $F > 0.4$. Puisque l'opération de \textit{sélection} tend à réduire la diversité dans la population, le rôle de la \textit{mutation} et de balancer cette pression exercée sur la population et tend à augmenter la diversité. Si $F$ est trop petit, l'ED peut converger même avec l'absence de la pression sélective. En ce qui concerne le taux de croisement $CR$, Salomon (1996) \cite{Salomon1996} a démontré les limites d'un $CR$ trop petit et par conséquent Storn et Price recommandent des valeurs de $CR$ proche de $1$. Reste à choisir la taille de la population $N_P$, généralement $10D \leq N_P \leq 20D$ est recommandé mais dans notre cas on optera à $N_P = 100$.
+
+\subsection{Cas 1: Cellule 57-mm de RTC France}
+
+Ce premier cas d'étude concerne la cellule en silicium de RTC France avec un diamètre de 57 mm qui a été très largement étudiée dans la littérature. Sa courbe caractéristique a été mesurée dans des conditions de température $T = \SI{33}{\celsius}$ et irradiance solaire $\SI{1000}{\watt\per\square\meter}$ et comprend 26 points expérimentaux (figure \ref{fig:RTCexp}). Figure \ref{fig:RTCres}.a montre que la caractéristique expérimentale et calculée par l'ED sont graphiquement quasi-identiques. Figure \ref{fig:RTCres}.b montre l'évolution de la moyenne des valeurs de fitness des vecteurs évalués par la fonction objectif dans chaque génération consécutive. On constate que dès la 100\textsuperscript{ème} génération, l'ED a pratiquement déjà convergé.
+
+Le tableau \ref{tab:RTCres} présente une comparaison entre l'ED et d'autre méthodes appliquées à la cellule RTC France. On constate que les valeurs retrouvées par l'ED sont assez proches de celles des autres travaux. En effet, l'ED parvient à une erreur RMSE de \num{7.7692e-04} qui est supérieure aux autres techniques similaire comme les essaims particulaires \cite{Hamid2016}, l'algorithme des colonies d'abeilles artificielles \cite{Oliva2014} et l'ED à trois points \cite{Chin2019}. Les résultats les moins précis sont ceux de la méthode de Newton à moindres carrés \cite{Easwarakhanthan1986}.
+
+\begin{table}
+  \caption{Bornes utilisées de l'espace de recherche pour le modèle simple diode}
+  \label{tab:singleboundaries}
+
+  \begin{center}
+    \begin{tabular}{ccc}
+       \hline
+       Paramètre & Borne inférieure & Borne supérieure \\
+       \hline
+       $R_s$      & 0 & 1 \\
+       $R_{sh}$ & 2 & 100 \\
+       $a$         & 1 &2\\
+       $I_0$      & \num{1e-07} & \num{1e-04} \\
+       $I_{PV}$ & 0 & 10\\
+       \hline
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.6\textwidth]{resources/RTCFrance/exp.png}
+    \caption{Données expérimentales de la caractéristique IV de la cellule RTC France mesurées à \SI{33}{\celsius}}
+    \label{fig:RTCexp}
+  \end{center}
+\end{figure}
+
+\begin{figure*}[t!]
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{resources/RTCFrance/singled/iv.png}
+        \caption{Comparaison entre la courbe expérimentale (vert) et la caractéristique calculée (bleu)}
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{resources/RTCFrance/singled/fitness.png}
+        \caption{Évolution de la valeur moyenne de fitness de chaque génération}
+    \end{subfigure}
+    \caption{Résultats de l'ED appliquée sur la cellule RTC France 57 mm}
+    \label{fig:RTCres}
+\end{figure*}
+
+\begin{table}
+  \caption{Comparaison de l'ED avec d'autres méthodes dans la littérature}
+  \label{tab:RTCres}
+
+  \begin{center}
+  \scriptsize
+    \begin{tabular*}{\textwidth}{l@{\extracolsep{\fill}}cllllll }
+       \hline
+       Paramètres & Référence & $R_s$ (\si{\ohm}) & $R_{sh} (\si{\ohm})$ & $a $ & $I_0$ (\si{\micro\ampere}) & $I_{PV}$ (\si{\ampere}) & $RMSE$ \\
+       \hline
+       ED         &                                                 & \num{0.0363} & \num{54.1134} & \num{1.4709} & \num{0.3209} & \num{0.7607} & \num{7.7692e-04}\\
+       ED3P     & \cite{Chin2019}                      & \num{0.0363} & \num{54.1924} & \num{1.4798} & \num{0.3191} & \num{0.7607} & \num{8.1291e-04}\\
+       PSO       & \cite{Hamid2016}                   & \num{0.0363} & \num{53.8550} & \num{1.4816} & \num{0.3245} & \num{0.7607} & \num{9.8606e-04} \\
+       ABC       & \cite{Oliva2014}                     & \num{0.0364} & \num{53.6433} & \num{1.4817} & \num{0.3251} & \num{0.7608} & \num{9.8620e-04} \\
+       Newton & \cite{Easwarakhanthan1986} & \num{0.0364} & \num{53.7634} & \num{1.4837} & \num{0.3223} & \num{0.7608} & \num{9.70e-03}\\
+       GA         & \cite{Oliva2014}                     & \num{0.0299} & \num{42.3729} & \num{1.5751} & \num{0.8087} & \num{0.7619} & \num{1.90e-02}\\
+       \hline
+    \end{tabular*}
+  \end{center}
+\end{table}
+
+La performance superieure demontree par l'ED par rapport aux autres algorithme provient probablement de ses capacités à la \textit{recherche globale}. L'existence d'une multitude de minimums locaux est demontrée dans la figure \ref{fig:neigh} où on a projeté l'espace de recherche 5-dimensionnel sur 2 dimensions au voisinage du minimum global. On fait varier le facteur d'idéalité $a$ et la résistance série $R_s$ dont le modèle est très sensible aux variations. Les trois autres paramètres $R_{sh}$, $I_0$ et $I_{PV}$ sont fixés sur les valeurs du minimum global retrouvé par l'ED comme dans le tableau \ref{tab:RTCres}.
+
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=0.5\textwidth]{resources/RTCFrance/singled/neighborhood.png}
+    \caption{Le voisinage du minimum global retrouvé par l'ED selon le facteur d'idéalité et la résistance en série. Notons l'existence des "vallées" qui comprennent potentiellement plusieurs minimums locaux}
+    \label{fig:neigh}
+  \end{center}
+\end{figure}
+
+\subsection{Analyse de cohérence}
+
+La nature stochastique de l'Évolution Différentielle fait qu'elle donne des résultats différents après chaque essai. Ceci impose une analyse de cohérence de la méthode pour estimer la fiabilité de l'ED pendant plusieurs essais consécutifs. Figure \ref{fig:consist} montre la RMSE de la solution finale dans 30 essais indépendants de l'ED.
+Tous les points sont localisés dans une région très concentrée de l'espace de recherche ce qui indique que l'ED parvient effectivement à localiser le minimum global.
+Les écart-types des paramètres montrés sur le tableau \ref{tab:RTCstats} confirment ceci puisque ils peuvent être interprétés comme un indice de "stabilité" de l'algorithme qui quantifié sa capacité a reproduire les mêmes résultats. Tous les écart-types sont de l'ordre de $10^{-3}$ ou moins, donc une solution précise est garantie dans n'importe quel essai.
+
+\begin{figure}
+    \begin{center}
+      \includegraphics[width=.5\textwidth]{resources/RTCFrance/singled/consist.png}
+      \caption{Les RMSEs obtenues lors de 30 essais indépendants sur la cellule RTC France 57 mm}
+      \label{fig:consist}
+    \end{center}
+  \end{figure} 
+
+\begin{table}
+  \caption{Valeurs Moyennes de quelques paramètres influents de la cellule RTC France 57 mm et les écart-types associés des 30 essais}
+  \label{tab:RTCstats}
+
+  \begin{center}
+    \begin{tabular}{ccc}
+       \hline
+       Paramètre & Valeur Moyenne & Écart-Type\\
+       \hline
+       $RMSE$   & \num{7.8925e-04} & \num{5.3670e-05} \\
+       $R_s$      & \num{3.6355e-02}    & \num{3.8936e-04} \\
+       $a$    & \num{1.4722}              & \num{5.7539e-03} \\
+       $I_0$ & \num{3.2655e-07}       & \num{3.4071e-08}\\
+       \hline
+    \end{tabular}
+  \end{center}
+\end{table}
 
 \section{Conclusion}
