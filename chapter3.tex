@@ -77,7 +77,7 @@ De la définition de la fonction W, la solution d'une équation $xe^x = a$ est $
   \label{eq:lambertwsingle}
   I = \frac{R_{sh}(I_0 + I_{PV}) - V}{R_s + R_{sh}} - \frac{W\left(\frac{R_s I_0 R_{sh}}{a V_{th}(R_s + R_{sh})}e^{\left(\frac{R_{sh}(R_s I_{PV} + R_s I_0 + V)}{a V_{th} (R_s + R_{sh})}\right)}\right)aV_{th}}{R_s}
 \end{equation}
-On remarque bien que le second membre ne contient nul part un terme de courant $I$. Il faut noter aussi que le terme de la fonction $W$ est sous risque d'un dépassement et de retourner de valeurs infinies. Pour des raisons de stabilité numérique on utilise la notion de \textit{Conductance Shunt}: $C_{sh} = \frac{1}{R_{sh}}$ car cette résistance prend souvent de valeurs $\gg 1$ ce qui entraîne un risque de divergence des calculs. On trouve souvent des valeurs larges de résistance shunt, ce qui explique l'existence dans la littérature de plusieurs modèles utilisant la simplification $R_{sh} = + \infty$. Avec la substitution de la conductance shunt, si $R_{sh}\rightarrow\infty$ alors $C_{sh} \rightarrow 0$ ce qui assure la stabilité du calcul numérique.
+On remarque bien que le second membre ne contient nul part un terme de courant $I$. Il faut noter aussi que le terme de la fonction $W$ est sous risque d'un dépassement et de retourner des valeurs infinies. Pour des raisons de stabilité numérique on utilise la notion de \textit{Conductance Shunt}: $C_{sh} = \frac{1}{R_{sh}}$ car cette résistance prend souvent de valeurs $\gg 1$ ce qui entraîne un risque de divergence des calculs. On trouve souvent des valeurs larges de résistance shunt, ce qui explique l'existence dans la littérature de plusieurs modèles utilisant la simplification $R_{sh} = + \infty$. Avec la substitution de la conductance shunt, si $R_{sh}\rightarrow\infty$ alors $C_{sh} \rightarrow 0$ ce qui assure la stabilité du calcul numérique.
 
 Le modèle double diodes (équation \ref{eq:doublediode}) contient un terme exponentiel pour chaque diode. De la même manière que Jain et Kapoor on retrouve explicitement l'expression du courant avec deux termes de la fonction $W$ (equation \ref{eq:lambertwdouble}).
 \begin{equation}
@@ -110,15 +110,12 @@ Le tableau \ref{tab:RTCres} présente une comparaison entre l'ED et d'autre mét
   \label{tab:singleboundaries}
 
   \begin{center}
-    \begin{tabular*}{.7\textwidth}{l@{\extracolsep{\fill}}cc}
+    \begin{tabular*}{\textwidth}{l@{\extracolsep{\fill}}lllll}
        \hline
-       \textbf{Paramètre} & \textbf{Borne inférieure} & \textbf{Borne supérieure}   \\
+       Paramètre         & $R_s$ & $R_{sh}$ & $a$ & $I_0$      & $I_{PV}$ \\
        \hline
-       $R_s$    & 0 & 1 \\
-       $R_{sh}$ & 2 & 100 \\
-       $a$      & 1 & 2\\
-       $I_0$    & \num{1e-07} & \num{1e-04} \\
-       $I_{PV}$ & 0 & 10\\
+       Borne supérieure  & 1     & 100      & 2   & \num{1e-06}& 10\\
+       Borne inférieure  & 0     & 2        & 1   & \num{1e-07}& 0 \\
        \hline
     \end{tabular*}
   \end{center}
@@ -171,25 +168,20 @@ Le tableau \ref{tab:RTCres} présente une comparaison entre l'ED et d'autre mét
 \nomenclature{$ED3P$}{Évolution différentielle à trois points}
 \nomenclature{ABC}{Colonies d'abeilles artificielles (\textit{Artificial Bee Colony Optimization})}
 
-\subsubsection{Modèle double diode}
 En ce qui concerne le modèle double diode, les deux facteurs d'idéalité $a_1$ et $a_2$ ainsi que les courants de saturation $I_{01}$ et $I_{02}$ sont indépendants les uns les autres mais sont contraints dans les limites dans le tableau \ref{tab:doubledboundaries}. Les résultats de l'ED en double diode sont comparés avec ceux de quelques autres méthode dans le tableau \ref{tab:RTCresdouble}.
 \begin{table}[H]
   \caption{Bornes de l'espace de recherche à 7 dimensions}
   \label{tab:doubledboundaries}
 
   \begin{center}
-    \begin{tabular*}{.7\textwidth}{l@{\extracolsep{\fill}}cc}
+  \small
+    \begin{tabular*}{\textwidth}{l@{\extracolsep{\fill}}lllllll}
       \hline
-      \textbf{Paramètre} & \textbf{Borne inférieure} & \textbf{Borne Supérieure}\\
+      Paramètre & $R_s$ & $R_{sh}$ & $a_1$ & $a_2$ & $I_{01}$   & $I_{02}$    & $I_{PV}$ \\
       \hline
-      $R_s$    & 0 & 1 \\
-      $R_{sh}$ & 2 & 100 \\
-      $a_1$    & 1 & 2\\
-      $a_2$    & 1 & 2\\
-      $I_{01}$ & \num{1e-07} & \num{1e-04} \\
-      $I_{02}$ & \num{1e-07} & \num{1e-04} \\
-      $I_{PV}$ & 0 & 10\\
-       \hline
+      Borne supérieure  & 1     & 100      & 2     & 2     & \num{1e-04}& \num{1e-04} & 10 \\
+      Borne inférieure  & 0     & 2        & 1     & 1     & \num{1e-07}& \num{1e-07} & 0  \\
+      \hline
     \end{tabular*}
   \end{center}
 \end{table}
@@ -206,12 +198,12 @@ En ce qui concerne le modèle double diode, les deux facteurs d'idéalité $a_1$
        \hline
        ED (double diode) &                            & \num{0.02061}   & \num{51.9345} & \num{1.87579} & \num{1.43602} & \num{4.2322e-07} 
                                                       & \num{1.8726e-07}& \num{0.76055} & \num{7.63e-04}   \\
+       ABC               & \cite{Oliva2014}           & \num{0.0364}    & \num{53.7804} & \num{1.4495} & \num{1.4885} & \num{4.07e-08}
+                                                      & \num{2.874e-07} & \num{0.7608}  & \num{9.861e-04}\\
        PSO               & \cite{Jordehi2016}         & \num{0.05861}   & \num{18.2106} & \num{1.00012} & \num{1.00091} & \num{2.8601e-10} 
                                                       & \num{1e-12}     & \num{0.7633}  & \num{8.1646e-03} \\
        GSA               & \cite{Jordehi2017}         & \num{0.02914}   & \num{51.116}  & \num{1.6087}  & \num{1.62889} & \num{6.60621e-7} 
                                                       & \num{4.55149e-7}& \num{0.76886} & \num{5.91958e-03}\\
-       ABC               & \cite{Oliva2014}           & \num{0.0364}    & \num{53.7804} & \num{1.4495} & \num{1.4885} & \num{4.07e-08}
-                                                      & \num{2.874e-07} & \num{0.7608}  & \num{9.861e-04}\\
        \hline
     \end{tabular*}
   \end{center}
@@ -239,7 +231,7 @@ Nous nous concernons dans ce deuxième cas d'étude du module monocristallin Sch
 \end{figure*}
 
 \begin{table}
-  \caption{Comparaison de l'ED avec d'autres méthodes dans la littérature sur le module STM6-40/36}
+  \caption{Comparaison de l'ED (simple diode) avec d'autres méthodes dans la littérature sur le module STM6-40/36}
   \label{tab:stm6}
 
   \begin{center}
@@ -260,12 +252,11 @@ Nous nous concernons dans ce deuxième cas d'étude du module monocristallin Sch
 \nomenclature{CIABC}{Chaotic Improved Artificial Bee Colony}
 \nomenclature{CWOA}{Chaotic Whale Optimization Algorithm}
 
-\subsubsection{Modèle double diode}
 
 Les résultats de l'ED avec le modèle double diode sur le module STM6-40/36 sont présenté dans le tableau \ref{tab:STM6double} avec d'autres techniques tel quel les colonies d'abeilles artificielles et les essaims particulaires. Le tableau \ref{tab:stm6doublelimits} montre les bornes utilisées comme limites de l'espace de recherche. Notons la similarité des qualités des résultats du modèle simple et double diode.
 
 \begin{table}[H]
-  \caption{Comparaison de l'ED avec d'autres méthodes sur le module photovoltaïque STM6-40/36}
+  \caption{Comparaison de l'ED (double diode) avec d'autres méthodes sur le module photovoltaïque STM6-40/36}
   \label{tab:STM6double}
 
   \begin{center}
@@ -291,21 +282,78 @@ Les résultats de l'ED avec le modèle double diode sur le module STM6-40/36 son
   \label{tab:stm6doublelimits}
 
   \begin{center}
-    \begin{tabular*}{.7\textwidth}{l@{\extracolsep{\fill}}cc}
+    \begin{tabular*}{\textwidth}{l@{\extracolsep{\fill}}lllllll}
       \hline
-      \textbf{Paramètre} & \textbf{Borne inférieure} & \textbf{Borne Supérieure}\\
+      Paramètre         & $R_s$ & $R_{sh}$ & $a_1$ & $a_2$ & $I_{01}$   & $I_{02}$    & $I_{PV}$ \\
       \hline
-      $R_s$    & 0 & 1 \\
-      $R_{sh}$ & 2 & 100 \\
-      $a_1$    & 1 & 2\\
-      $a_2$    & 1 & 2\\
-      $I_{01}$ & \num{0} & \num{1e-04} \\
-      $I_{02}$ & \num{0} & \num{1e-04} \\
-      $I_{PV}$ & 0 & 10\\
+      Borne Supérieure  & 1     & 100      & 2     & 2     & \num{1e-04}& \num{1e-04} & 10\\
+      Borne inférieure  & 0     & 2        & 1     & 1     & 0          & 0           & 0\\
       \hline
     \end{tabular*}
   \end{center}
 \end{table}
+
+\subsection{Cas 3: Module polycristallin Photowatt-PWP 201}
+
+Le 3\textsuperscript{ème} cas concerne le module polycristallin Photowatt-PWP 201 composé de 36 cellules en série. Les données expérimentales ont été prise dans des conditions d'irradiation de $1000 \si{\watt\per\square\meter}$ et une température de $T = 45 \si{\celsius}$. Le tableau \ref{tab:pwpsingle} compare les résultats obtenus par Évolution Différentielle contre d'autres méthodes dans la littérature. Les valeurs des paramètres simple diode retrouvée par l'ED sont très similaires aux autres, mais sont plus précises en termes de RMSE. Figure \ref{fig:pwpsingle} montre la courbe caractéristique calculée (a) et la courbe de convergence de l'ED (b). Les bornes de l'espace de recherche sont identiques à celle de la cellule RTC France (Tableau \ref{tab:singleboundaries}) sauf pour le courant de saturation qu'on limite à $\num{1e-7} \leq I_{0} \leq \num{1e-5}$. Le modèle double diode est plus précis que le modèle simple diode avec l'ED, mais ce dernier reste plus précis que les autres techniques similaires.
+
+\begin{table}[H]
+  \caption{Comparaison de l'ED avec d'autres méthodes dans la littérature sur le module STM6-40/36}
+  \label{tab:pwpsingle}
+
+  \begin{center}
+    \scriptsize
+    \begin{tabular*}{\textwidth}{l@{\extracolsep{\fill}}cllllll}
+      \hline
+      Paramètres & Référence & $R_s$ (\si{\milli\ohm}) & $R_{sh} (\si{\ohm})$ & $a $ & $I_0$ (\si{\micro\ampere}) & $I_{PV}$ (\si{\ampere}) & $RMSE$ \\
+      \hline
+       ED (simple diode)  &                   & \num{0.0343} & \num{22.8238} & \num{1.3139} & \num{2.6380} & \num{1.0314} & \num{2.0529e-03}  \\
+       ED3P               & \cite{Chin2019}   & \num{0.0347} & \num{19.3720} & \num{1.3002} & \num{2.1247} & \num{1.0335} & \num{2.4227e-03}  \\
+       ISCE               & \cite{Gao2018}    & \num{0.0333} & \num{27.2772} & \num{1.3512} & \num{3.4823} & \num{1.0305} & \num{2.4251e-03}  \\
+       CIABC              & \cite{Wu2018}     & \num{0.0333} & \num{27.2772} & \num{1.3512} & \num{3.4822} & \num{1.0305} & \num{2.425e-03}   \\
+       Newton     & \cite{Easwarakhanthan1986}& \num{0.0335} & \num{15.2625} & \num{1.3458} & \num{3.2876} & \num{1.0318} & \num{5.6010e-01}  \\
+       \hline
+    \end{tabular*}
+  \end{center}
+\end{table}
+
+\begin{figure*}[t!]
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{resources/pwp/iv.png}
+        \caption{Caractéristique expérimentale et calculée du module polycristallin Photowatt-PWP 201.}
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{resources/pwp/fitness.png}
+        \caption{Courbe de convergence de L'ED. Notons la convergence rapide (avant $< 100$ itérations)}
+    \end{subfigure}
+    \caption{Résultats de l'ED appliquée sur au module Photowatt PWP-201}
+    \label{fig:pwpsingle}
+\end{figure*}
+
+\begin{table}[H]
+  \caption{Comparaison de l'ED avec d'autres méthodes sur le module photovoltaïque Photowatt-PWP 201}
+  \label{tab:pwpdouble}
+
+  \begin{center}
+  \scriptsize
+    \begin{tabular*}{\textwidth}{l@{\extracolsep{\fill}}cllllllll}
+       \hline
+       Paramètres & Référence & $R_s$ (\si{\ohm}) & $R_{sh} (\si{\ohm})$ & $a_1$ & $a_2$ & $I_{01}$ (\si{\ampere}) & $I_{02}$ (\si{\ampere}) & $I_{PV}$ (\si{\ampere}) & $RMSE$ \\
+       \hline
+       ED (double diode) &                            & \num{0.8604}    & \num{19.2098}& \num{1.2165} & \num{1.5326}    & \num{1.6785e-7} 
+                                                      & \num{2.6073e-06}& \num{1.03193}& \num{1.50208e-03}   \\
+       TVACPSO           & \cite{Jordehi2016}         & \num{1.2356}    & \num{22.8236}& \num{1.3210} & \num{2.7778}   & \num{2.6381e-6} 
+                                                      & \num{1e-12}     & \num{1.03143}& \num{2.0530e-03}   \\
+       %ABC               & \cite{RezaeeJordehi2018}   & \num{0.03434}   & \num{26.0613}& \num{1.9851}  & \num{1.4687}** & \num{8.938e-6} 
+       %                                               & \num{1e-12}     & \num{1.66347}& \num{2.0538e-03}\\
+       \hline
+    \end{tabular*}
+  \end{center}
+\end{table}
+
+
 
 \subsection{Analyse et cohérence de l'ED}
 
@@ -313,7 +361,7 @@ La performance supérieure démontrée par l'ED par rapport aux autres algorithm
 
 \begin{figure}[H]
   \begin{center}
-    \includegraphics[width=0.5\textwidth]{resources/RTCFrance/singled/neighborhood.png}
+    \includegraphics[width=\textwidth]{resources/RTCFrance/singled/neighborhood.png}
     \caption{Le voisinage du minimum global retrouvé par l'ED selon le facteur d'idéalité et la résistance en série. Notons l'existence des "vallées" qui comprennent potentiellement plusieurs minimums locaux}
     \label{fig:neigh}
   \end{center}
@@ -321,15 +369,22 @@ La performance supérieure démontrée par l'ED par rapport aux autres algorithm
 
 La nature stochastique de l'Évolution Différentielle fait qu'elle donne des résultats différents après chaque essai. Ceci impose une analyse de cohérence de la méthode pour estimer la fiabilité de l'ED pendant plusieurs essais consécutifs. Figure \ref{fig:consist} montre la RMSE de la solution finale dans 30 essais indépendants de l'ED.
 Tous les points sont localisés dans une région très concentrée de l'espace de recherche ce qui indique que l'ED parvient effectivement à localiser le minimum global.
-Les écart-types des paramètres montrés sur le tableau \ref{tab:RTCstats} confirment ceci puisque ils peuvent être interprétés comme un indice de "stabilité" de l'algorithme qui quantifié sa capacité a reproduire les mêmes résultats. Tous les écart-types sont de l'ordre de $10^{-3}$ ou moins, donc une solution précise est garantie dans n'importe quel essai.
+La cohérence des différents essais concernant la $R_s$ et le $a$ du module Photowatt-PWP 201 (Figure \ref{fig:paramconsist}) et les écart-types des paramètres montrés sur le tableau \ref{tab:RTCstats} confirment ceci puisque ils peuvent être interprétés comme un indice de "stabilité" de l'algorithme qui quantifié sa capacité a reproduire les mêmes résultats. Tous les écart-types sont de l'ordre de $10^{-3}$ ou moins, donc une solution précise est garantie dans n'importe quel essai.
 
-\begin{figure}
-    \begin{center}
-      \includegraphics[width=.5\textwidth]{resources/RTCFrance/singled/consist.png}
-      \caption{Les RMSEs obtenues lors de 30 essais indépendants sur la cellule RTC France 57 mm}
-      \label{fig:consist}
-    \end{center}
-  \end{figure} 
+\begin{figure*}[t!]
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{resources/RTCFrance/singled/consist.png}
+        \caption{Cellule RTC France 57 mm}
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{resources/pwp/consistency.png}
+        \caption{Module Photowatt-PWP 201}
+    \end{subfigure}
+    \caption{Les RMSEs obtenues lors de 30 essais indépendants}
+    \label{fig:consist}
+\end{figure*}
 
 \begin{table}
   \caption{Valeurs Moyennes de quelques paramètres influents de la cellule RTC France 57 mm et les écart-types associés des 30 essais}
@@ -348,6 +403,21 @@ Les écart-types des paramètres montrés sur le tableau \ref{tab:RTCstats} conf
     \end{tabular*}
   \end{center}
 \end{table}
+
+\begin{figure*}[t!]
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{resources/pwp/rsconsist.png}
+        \caption{Résistance série $R_s$}
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{resources/pwp/aconsist.png}
+        \caption{Facteur d'idéalité $a$}
+    \end{subfigure}
+    \caption{Résultats obtenus pour le facteur d'idéalité et la résistance série du module PHotowatt-PWP 201 pendant 30 essais indépendants}
+    \label{fig:paramconsist}
+\end{figure*}
 
 \section{Utilisation de l'outil \textit{DEPV}}
 

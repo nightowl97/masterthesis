@@ -17,8 +17,11 @@
 \usepackage{subcaption}
 \usepackage{tabularx}
 
+%tableau en francais
+\addto\captionsfrench{\def\tablename{\textsc{Tableau}}}
+
 %nomenclature
-\usepackage[intoc, french, noprefix]{nomencl}
+\usepackage[notintoc, french, noprefix]{nomencl}
 \makenomenclature
 %run makeindex -s nomencl.ist -o main.nls main.nlo
 %Units
