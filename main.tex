@@ -1,6 +1,7 @@
 %debugging
 %\errorcontextlines=200
 \documentclass[french, 12pt, twoside, openright, a4paper]{report}
+%for left chapter titles add openright to report
 \usepackage[utf8]{inputenc}
 \usepackage{lmodern}
 \usepackage[T1]{fontenc}
@@ -15,6 +16,18 @@
 \usepackage{xcolor}
 \usepackage{subcaption}
 \usepackage{tabularx}
+
+%nomenclature
+\usepackage[intoc, french, noprefix]{nomencl}
+\makenomenclature
+%run makeindex -s nomencl.ist -o main.nls main.nlo
+%Units
+%----------------------------------------------
+\newcommand{\nomunit}[1]{%
+\renewcommand{\nomentryend}{\hspace*{\fill}#1}}
+%----------------------------------------------
+\setlength\nomlabelwidth{1.5cm}
+\renewcommand{\nomname}{Nomenclature}
 
 %circuits
 \usepackage{tikz, circuitikz}

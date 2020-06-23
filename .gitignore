@@ -22,3 +22,7 @@
 *.synctex.gz
 *.synctex.gz(busy)
 *.pdfsync
+*.nlo
+*.ilg
+*.nls
+*.nls~

@@ -63,6 +63,9 @@ $V_{\text{min},j}$ et $V_{\text{max},j}$ sont les bornes inférieures   et supé
 \clearpage
 
 \subsection{Mutation}
+\nomenclature[1vbase]{$\vec{V}_{base}$}{Vecteur de base}
+\nomenclature[1vmut]{$\vec{M}_{i}$}{Vecteur mutant}
+\nomenclature[1vessai]{$\vec{T}_{i}$}{Vecteur d'essai}
 
 \begin{wrapfigure}{r}{0.5\textwidth}
   \vspace*{-10pt} 
@@ -79,11 +82,11 @@ $V_{\text{min},j}$ et $V_{\text{max},j}$ sont les bornes inférieures   et supé
         \node at (0)[circle,fill,inner sep=1.2pt]{};
         \tkzLabelPoint[left](0){\smaller $\vec{V}_{base,gen}$};
         \node at (1)[circle,fill,inner sep=1.2pt]{};
-        \tkzLabelPoint[right](1){\smaller $\vec{V}_{r1,gen}$};
+        \tkzLabelPoint[right](1){\smaller $\vec{V}_{r2,gen}$};
         \node at (2)[circle,fill,inner sep=1.2pt]{};
-        \tkzLabelPoint[right](2){\smaller $\vec{V}_{r2,gen}$};
-        \node at (3)[circle,fill,inner sep=1.2pt]{};
-        \tkzLabelPoint[above](3){\smaller $\vec{M}_{i,gen} = \vec{V}_{base,gen} + F (\vec{V}_{r1,gen} - \vec{V}_{r2,gen})$};
+        \tkzLabelPoint[right](2){\smaller $\vec{V}_{r1,gen}$};
+        \node at (3)[circle,fill,color=blue,inner sep=1.2pt]{};
+        \tkzLabelPoint[above](3){\color{blue}{\smaller $\vec{M}_{i,gen} = \vec{V}_{base,gen} + F (\vec{V}_{r1,gen} - \vec{V}_{r2,gen})$}};
         
         \draw[->, thick] (1) -- (6.5, 5.25) node[midway, right]{\smaller $F (\vec{V}_{r1,gen} - \vec{V}_{r2,gen})$};
         
@@ -185,8 +188,6 @@ Dans notre application de l'ED sur le problème d'identification des paramètres
   \caption{Stratégie DE/best/1/bin}
   \label{alg:debestbin}
 \end{algorithm}
-
-%\section{Application aux modèles simple et double diodes}
 
 %\section{Métaheuristique}
 

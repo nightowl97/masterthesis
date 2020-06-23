@@ -5,7 +5,7 @@ Dans ce chapitre, nous parlerons des circuit électriques à éléments localis�
 
 \section{Généralités}
 
-Fondamentalement, les cellules PV se composent de deux couches de semi-conducteurs à dopages différents, la jonction de ces deux couches étant exposée à la lumière incidente. En effet, les électrons dans la bande de conduction sont capables d'être transférés vers la bande de valence tant que l'énergie du photon incident $E = h \nu$ est supérieure à la largeur de la bande interdite $E_g = E_c - E_v$. Toute l'architecture d'une cellule quelconque vise à profiter le plus que possible de la différence de tension engendrée par les excitons séparés par le champ électrique dans la zone de déplétion (ou zone de charge d'espace) (figure \ref{fig:pn}). Par exemple, les contacts supérieurs sont des oxydes transparents conductifs (dit couche fenêtre) pour laisser passer le plus grand nombre de photons possible vers la couche absorbante de la cellule. Pour quelques cellule en couche mince, le contact arrière se compose d'une couche réfléchissante (ZnO et Ag ou Al) qui renvoie la lumière vers la couche absorbante pour minimiser davantage les pertes en lumière transmise \cite{Chopra2004}.
+Fondamentalement, les cellules PV se composent de deux couches de semi-conducteurs à dopages différents, avec la jonction de ces deux couches étant exposée à la lumière incidente. En effet, les électrons dans la bande de conduction sont capables d'être transférés vers la bande de valence tant que l'énergie du photon incident $E = h \nu$ est supérieure à la largeur de la bande interdite $E_g = E_c - E_v$\nomenclature{$E_g$}{Énergie de gap \nomunit{\si{\electronvolt}}}. Toute l'architecture d'une cellule quelconque vise à profiter le plus que possible de la différence de tension engendrée par les excitons séparés par le champ électrique dans la zone de déplétion (ou zone de charge d'espace) (figure \ref{fig:pn}). Par exemple, les contacts supérieurs sont des oxydes transparents conductifs (dit couche fenêtre) pour laisser passer le plus grand nombre de photons possible vers la couche absorbante de la cellule. Pour quelques cellule en couche mince, le contact arrière se compose d'une couche réfléchissante (ZnO et Ag ou Al) qui renvoie la lumière vers la couche absorbante pour minimiser davantage les pertes en lumière transmise \cite{Chopra2004}.
 
 \begin{figure}
   \begin{center}
@@ -16,7 +16,7 @@ Fondamentalement, les cellules PV se composent de deux couches de semi-conducteu
   \end{center}
 \end{figure}  
 
-En fait, le comportement électrique d'un telle cellule en l'absence de la lumière est identique à celui d'une diode PN classique dont la caractéristique est décrite par l'équation de Shockley (équation \ref{eq:shockley}). Dans cette formule, le $I_0$ est le courant de saturation de la diode, $q$ la charge élémentaire $e^{-}$, $a$ le facteur d'idéalité, $k$ la constante de Boltzmann et $T$ la température de la cellule. Parfois on utilise la notion de \textit{voltage thermique}: $V_t = \frac{kT}{q}$.
+En fait, le comportement électrique d'un telle cellule en l'absence de la lumière est identique à celui d'une diode PN classique dont la caractéristique est décrite par l'équation de Shockley (équation \ref{eq:shockley}). Dans cette formule, le $I_0$ \nomenclature{$I_0$}{Courant de Saturation \nomunit{\si{\micro\ampere}}} est le courant de saturation de la diode, $q$ \nomenclature{$q$}{Charge Élémentaire \nomunit{$1.6021764 \times 10^{-19}\ \si{\coulomb}$}} la charge élémentaire $e^{-}$, $a$ le facteur d'idéalité\nomenclature{$a$}{Facteur d'idéalité}, $k$ la constante de Boltzmann \nomenclature{$k$}{Constante de Boltzmann \nomunit{$1.3806503 \times 10^{-23}$ \si{\joule\per\kelvin}} } et $T$ \nomenclature[1temp]{$T$}{Température de la cellule/du module \nomunit{\si{\kelvin}}} la température de la cellule. Parfois on utilise la notion de \textit{voltage thermique}: $V_t = \frac{kT}{q}$ \nomenclature[1voltherm]{$V_t$}{Voltage Thermique \nomunit{\si{\volt}}}.
 
 \begin{equation}
 \label{eq:shockley}
@@ -27,7 +27,7 @@ Bien que ces modèles d'éléments localisé sont efficaces et précis pour les 
 
 %\subsection{Modèles à simple diode}
 
-Avec la présence de la lumière, les photons assez énergétique permettent la création des paires électron-trous qui, à leur tour, créent une différence de potentiel à travers la jonction. Une partie de ces porteurs de charge se recombine, mais l'autre se diffuse à travers les contacts de la cellule, ce qui donne naissance à un \textit{photo-courant} $I_{PV}$ (ou $I_L$) dont la valeur dépend de l'intensité de la lumière incidente.\\
+Avec la présence de la lumière, les photons assez énergétique permettent la création des paires électron-trous qui, à leur tour, créent une différence de potentiel à travers la jonction. Une partie de ces porteurs de charge se recombine, mais l'autre se diffuse à travers les contacts de la cellule, ce qui donne naissance à un \textit{photo-courant} $I_{PV}$ \nomenclature{$I_{PV}$}{Photocourant \nomunit{\si{\ampere}}} dont la valeur dépend de l'intensité de la lumière incidente.\\
 En ajoutant le photo-courant $I_{PV}$ à l'équation de Shockley \ref{eq:idealmodeleq}, on retrouve un modèle élémentaire qui décrit une cellule idéale, composé d'une source de courant connectée à une diode en parallèle (figure \ref{fig:idealcell}.a). Évidemment ce modèle est complètement décrit par trois paramètres: \textit{(i)} Le photo-courant $I_{PV}$, \textit{(ii)} le facteur d'idéalité de la diode $a$ et \textit{(iii)} son courant de saturation $I_0$. 
 \begin{equation}
 \label{eq:idealmodeleq}
@@ -36,7 +36,7 @@ En ajoutant le photo-courant $I_{PV}$ à l'équation de Shockley \ref{eq:idealmo
 
 On voit dans la figure \ref{fig:idealcell}.b que la courbe caractéristique connue de la cellule se forme par une translation verticale par $I_{PV}$ d'une part, et de la forme exponentielle de la diode de l'autre. Le facteur la courbure dans la région du point de puissance maximale est déterminée par le facteur d'idéalité de la diode.
 
-
+\nomenclature{$I_D$}{Courant de la diode \nomunit{\si{\ampere}}}
 
 \begin{figure*}[t!]
   \centering
@@ -66,7 +66,9 @@ On voit dans la figure \ref{fig:idealcell}.b que la courbe caractéristique conn
   \label{fig:idealcell}
 \end{figure*}
 
-\section{Les modèles simple diode \texorpdfstring{$R_S\ \text{et}\ R_P$}{Rs et Rp}}
+\section{Les modèles simple diode \texorpdfstring{$R_s\ \text{et}\ R_P$}{Rs et Rp}}
+\nomenclature{$R_s$}{Résistance série \nomunit{\si{\ohm}}}
+\nomenclature{$R_p$}{Résistance shunt \nomunit{\si{\ohm}}}
 Le modèle idéal précèdent est utile pour éclaircir le concept de la modélisation par circuits d'éléments localisés. Par contre, dans la pratique, et pour plus de précision, il est nécessaire de considérer les pertes ohmique de la cellule dans le matériau semi-conducteur utilisé et dans les contacts des électrodes. La manière la plus directe de modéliser ces phénomènes est de tout simplement ajouter une résistance en série $R_S$ au circuit idéal. Ceci nous laisse avec la relation modifiée \ref{eq:singlers} du modèle dit \textit{"simple diode-$R_S$"} qui a besoin de 4 paramètres pour une description complète: $I_{PV}$, $a$, $I_0$ et $R_S$.\\
 L'une des limites de ce modèle provient de son imprécision lorsque la cellule subit des variations non-négligeables de température. L'insertion d'une résistance shunt permet d'améliorer la sensibilité du modèle aux variations de température et en même temps de considérer tout courant de fuite pouvant traverser la jonction \cite{Chin2015b}. On se retrouve cette fois avec les 5 paramètres du modèle dit \textit{"simple diode-$R_P$"} ou tout simplement \textit{"simple diode"}: $I_0$, $I_{PV}$, $a$, $R_s$ et $R_P$. La relation entre ces paramètres est décrite par l'équation \ref{eq:single}. Ce modèle offre un compromis entre la simplicité et la précision et par conséquent est très largement testé et utilisé dans la littérature \cite{Carrero2007}. Le diagramme du circuit de ce modèle est présenté dans la figure \ref{fig:single}.
 

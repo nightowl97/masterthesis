@@ -1,16 +1,16 @@
 \chapter{Évolution Différentielle sur les circuits simple et double diodes}
 
 \section{Introduction}
-Maintenant que nous avons abordé les modèles à diodes et l'Évolution Différentielle indépendemment l'un de l'autre, dans ce chapitre nous allons appliquer l'ED sur les modèles pour estimer les valeurs des paramètres en utilisant les données expérimentales standards de la littérature. En ce qui concerne l'implementation pratique de cette technique, on utilise le langage de programmation \textit{Python}. On fait appel a quelques bibliothèques scientifiques de Python pour fournir les outils mathématiques requis par la méthode. A partir d'ici nous allons fournir des petits extraits de code pertinents à la discussion qui montrent la manière d'implémenter les étapes de la méthode. Pour des raisons de clarté ce ne sont pas des extraits complètement fidèles au code utilisé en réalité. Le code complet et non modifié est disponible comme annexe à la fin de ce document. 
+Maintenant que nous avons abordé les modèles à diodes et l'Évolution Différentielle indépendemment l'un de l'autre, dans ce chapitre nous allons appliquer l'ED \nomenclature{ED}{Évolution Differentielle (\textit{Differential Evolution})} sur les modèles pour estimer les valeurs des paramètres en utilisant les données expérimentales standards de la littérature. En ce qui concerne l'implémentation pratique de cette technique, on utilise le langage de programmation \textit{Python}. On fait appel a quelques bibliothèques scientifiques de Python pour fournir les outils mathématiques requis par la méthode. A partir d'ici nous allons fournir des petits extraits de code pertinents à la discussion qui montrent la manière d'implémenter les étapes de la méthode. Pour des raisons de clarté ce ne sont pas des extraits complètement fidèles au code utilisé en réalité. Le code complet et non modifié est disponible comme annexe à la fin de ce document. 
 
 \section{Fonction W de Lambert}
-Les méthodes évolutionnaires dépendent d'une fonction objectif qu'il faut minimiser, pour sélectionner les meilleures solutions dans une population. Dans notre cas, la fonction objectif est la \textit{RMSE} et elle quantifie la différence entre la courbe caractéristique du modèle et les données expérimentales. Cependant, chaque fois qu'un vecteur solution $\vec{V}$ (formules \ref{eq:vsol}) est généré, il faut pouvoir recréer la courbe I-V associée pour permettre à la fonction objectif de calculer la RMSE.
+Les méthodes évolutionnaires dépendent d'une fonction objectif qu'il faut minimiser, pour sélectionner les meilleures solutions dans une population. Dans notre cas, la fonction objectif est la \textit{RMSE} \nomenclature{RMSE}{Racine de l'erreur quadratique moyenne (\textit{Root Mean Squared Error})} et elle quantifie la différence entre la courbe caractéristique du modèle et les données expérimentales. Cependant, chaque fois qu'un vecteur solution $\vec{V}$ (formules \ref{eq:vsol}) est généré, il faut pouvoir recréer la courbe I-V associée pour permettre à la fonction objectif de calculer la RMSE.
 \begin{equation}
   \label{eq:vsol}
   \vec{V}_{\text{simple diode}} = 
   \begin{bmatrix}
     R_s\\
-    R_{sh}\\
+    R_{p}\\
     a\\
     I_0\\
     I_{PV}
@@ -19,7 +19,7 @@ Les méthodes évolutionnaires dépendent d'une fonction objectif qu'il faut min
   \vec{V}_{\text{double diode}} = 
   \begin{bmatrix}
     R_s\\
-    R_{sh}\\
+    R_{p}\\
     a_1\\
     a_2\\
     I_{01}\\
@@ -92,6 +92,11 @@ Le modèle double diodes (équation \ref{eq:doublediode}) contient un terme expo
 \section{Résultats}
 
 \subsection{Configuration de l'Évolution Différentielle}
+\nomenclature{$F$}{Facteur de mutation}
+\nomenclature{$CR$}{Taux de croisement}
+\nomenclature{$N_P$}{Taille de la population}
+%\nomenclature{$Gen_{max}$}{Nombre maximal de générations}
+\nomenclature{$D$}{Dimensions de l'espace de recherche}
 Pour appliquer l'Évolution Différentielle avec succès sur les modèles à diodes, il faut savoir choisir les bonnes valeurs de paramètres de contrôle $CR, F \text{et}\  N_P$. Il n'existe pas de règle stricte mais Storn et Price \cite{Price2005} donnent quelques indications. En ce qui concerne le facteur de mutation $F$, les valeurs $F \geq 1$ ne sont pas fiables et souvent convergent très lentement par rapport aux $F < 1$. Cependant, Zaharie (2002) \cite{Zaharie2002} constate une borne inférieure de $F > 0.4$. Puisque l'opération de \textit{sélection} tend à réduire la diversité dans la population, le rôle de la \textit{mutation} et de balancer cette pression exercée sur la population et tend à augmenter la diversité. Si $F$ est trop petit, l'ED peut converger même avec l'absence de la pression sélective. En ce qui concerne le taux de croisement $CR$, Salomon (1996) \cite{Salomon1996} a démontré les limites d'un $CR$ trop petit et par conséquent Storn et Price recommandent des valeurs de $CR$ proche de $1$. Reste à choisir la taille de la population $N_P$, généralement $10D \leq N_P \leq 20D$ est recommandé mais dans notre cas on optera à $N_P = 100$.
 
 \subsection{Cas 1: Cellule 57-mm de RTC France}
@@ -163,6 +168,9 @@ Le tableau \ref{tab:RTCres} présente une comparaison entre l'ED et d'autre mét
   \end{center}
 \end{table}
 
+\nomenclature{$ED3P$}{Évolution différentielle à trois points}
+\nomenclature{ABC}{Colonies d'abeilles artificielles (\textit{Artificial Bee Colony Optimization})}
+
 \subsubsection{Modèle double diode}
 En ce qui concerne le modèle double diode, les deux facteurs d'idéalité $a_1$ et $a_2$ ainsi que les courants de saturation $I_{01}$ et $I_{02}$ sont indépendants les uns les autres mais sont contraints dans les limites dans le tableau \ref{tab:doubledboundaries}. Les résultats de l'ED en double diode sont comparés avec ceux de quelques autres méthode dans le tableau \ref{tab:RTCresdouble}.
 \begin{table}[H]
@@ -209,7 +217,9 @@ En ce qui concerne le modèle double diode, les deux facteurs d'idéalité $a_1$
   \end{center}
 \end{table}
 
-\subsection{Module monocristallin Schutten Solar STM6-40/36}
+\nomenclature{GSA}{Gravitational Search Algorithm}
+
+\subsection{Cas 2: Module monocristallin Schutten Solar STM6-40/36}
 
 Nous nous concernons dans ce deuxième cas d'étude du module monocristallin Schutten Solar STM6-40/36 composé de 36 cellules ($156\si{\milli\meter}\times 156\si{\milli\meter}$) en série. Les données expérimentales ont été prises à une température de 51\si{\celsius}. Une comparaison des résultats de l'ED avec d'autres méthodes est présentée dans le tableau \ref{tab:stm6}. La correspondance de la caractéristique calculée par l'ED aux points experimentaux est démontrée graphiquement dans la figure \ref{fig:STM6res}. Malgré la distribution irrégulière des points, l'ED arrive a produire une solution précise. Sa précision et de même ordre de grandeur que ED3P \cite{Chin2019} mais elle est supérieure aux techniques des colonies des abeilles artificielles (ABC) \cite{Oliva2014}, de sa version améliorée par Oliva et al. (CIABC) \cite{Oliva2017a} et Chaotic Whale Optimization Algorithm (CWOA) \cite{Oliva2017}.
 
@@ -247,6 +257,8 @@ Nous nous concernons dans ce deuxième cas d'étude du module monocristallin Sch
     \end{tabular*}
   \end{center}
 \end{table}
+\nomenclature{CIABC}{Chaotic Improved Artificial Bee Colony}
+\nomenclature{CWOA}{Chaotic Whale Optimization Algorithm}
 
 \subsubsection{Modèle double diode}
 
@@ -272,6 +284,7 @@ Les résultats de l'ED avec le modèle double diode sur le module STM6-40/36 son
     \end{tabular*}
   \end{center}
 \end{table}
+\nomenclature{ELPSO}{Enhanced Leader Particle Swarm Optimization}
 
 \begin{table}[H]
   \caption{Limites de l'espace de recherche pour l'ED double diode sur le module photovoltaïque STM6-40/36}
@@ -335,6 +348,8 @@ Les écart-types des paramètres montrés sur le tableau \ref{tab:RTCstats} conf
     \end{tabular*}
   \end{center}
 \end{table}
+
+\section{Utilisation de l'outil \textit{DEPV}}
 
 \section{Conclusion}
 
