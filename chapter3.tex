@@ -45,7 +45,7 @@ On pourrait implémenter la fonction objectif en code de la manière suivante:\\
         rs, rp = vecteur[0], vecteur[1]
         if rs < 0 or rp < 0:
             return 100 # Valeur fitness large
-        ical = i_from_vect(vector, exp_vol) # Une fonction donnant la caractéristique IV de "vector"
+        ical = i_from_vect(vector, exp_v) # Une fonction donnant la caractéristique IV de "vector"
         erreur = ical - exp_i
         return np.sqrt(np.mean(erreur ** 2)) # RMSE         
 \end{minted}
@@ -110,9 +110,8 @@ Le modèle double diodes (équation \ref{eq:doublediode}) contient un terme expo
   \end{split}
 \end{equation}
 
-\section{Résultats}
+\section{Utilisation de l'outil \textit{DEPV}}
 
-\subsection{Configuration de l'Évolution Différentielle}
 \nomenclature{$F$}{Facteur de mutation}
 \nomenclature{$CR$}{Taux de croisement}
 \nomenclature{$N_P$}{Taille de la population}
@@ -120,8 +119,6 @@ Le modèle double diodes (équation \ref{eq:doublediode}) contient un terme expo
 \nomenclature{$D$}{Dimensions de l'espace de recherche}
 Pour appliquer l'Évolution Différentielle avec succès sur les modèles à diodes, il faut savoir choisir les bonnes valeurs de paramètres de contrôle $CR, F \text{et}\  N_P$. Il n'existe pas de règle stricte mais Storn et Price \cite{Price2005} donnent quelques indications. En ce qui concerne le facteur de mutation $F$, les valeurs $F \geq 1$ ne sont pas fiables et souvent convergent très lentement par rapport aux $F < 1$. Cependant, Zaharie (2002) \cite{Zaharie2002} constate une borne inférieure de $F > 0.4$. Puisque l'opération de \textit{sélection} tend à réduire la diversité dans la population, le rôle de la \textit{mutation} et de balancer cette pression exercée sur la population et tend à augmenter la diversité. Si $F$ est trop petit, l'ED peut converger même avec l'absence de la pression sélective. En ce qui concerne le taux de croisement $CR$, Salomon (1996) \cite{Salomon1996} a démontré les limites d'un $CR$ trop petit et par conséquent Storn et Price recommandent des valeurs de $CR$ proche de $1$. Reste à choisir la taille de la population $N_P$, généralement $10D \leq N_P \leq 20D$ est recommandé mais dans notre cas on optera à $N_P = 100$.
 
-
-\section{Utilisation de l'outil \textit{DEPV}}
 Dans ce projet, nous avons développé une bibliothèque en Python fournissant une interface permettant de lancer des calculs avec la technique de l'ED sur n'importe quelles cellule, à condition d'avoir accès aux données expérimentales. On fournit la fonction \pyth{read_csv()} qui permet à l'utilisateur d'extraire les points expérimentaux de la caractéristique IV (voltage en abscisses et courant en ordonnées) à partir d'un fichier .txt ou .csv. Nous fournissons aussi une classe \pyth{DE} qui gère tous les calculs. Il suffit de lui donner les paramètres nécessaires tel que les bornes de l'espace de recherche et le fichier contenant les données expérimentales. Pour plus de contrôle sur les paramètres de l'algorithme, la classe \pyth{DE} expose plusieurs variable à travers son "constructeur". Le prototype de la fonction constructrice ou \pyth{__init__()} est le suivant:
 
 \begin{minted}[mathescape,
@@ -146,15 +143,14 @@ Dans ce projet, nous avons développé une bibliothèque en Python fournissant u
         """
 \end{minted}
 Notons les valeurs prise par défaut pour la taille de la population $N_P = 100$, le nombre de générations maximal $Gen_{max} = 200$, le facteur de mutation $F = 0.7$ et le taux de croisement $CR = 0.8$. Si l'utilisateur ne fournit pas explicitement ces paramètres, les valeurs par défaut sont alors utilisées.
- Un exemple d'exécution de la classe DE sur la cellule est le suivant:
-
+Un exemple d'exécution de la classe DE sur la cellule est le suivant:
 \begin{minted}[mathescape,
                linenos,
                numbersep=5pt,
                gobble=2,
                frame=lines,
                framesep=2mm,
-               fontsize=\footnotesize]{Python}
+               fontsize=\scriptsize]{Python}
   # On importe la classe DE et la fonction read_csv()
   from objects import DE, read_csv
 
@@ -182,16 +178,15 @@ Notons les valeurs prise par défaut pour la taille de la population $N_P = 100$
   RTC.plot_fit_hist()
   RTC.plot_result(print_params=True)
 \end{minted}
-
-Si on veut utiliser le modèle double diode, il suffit de donner 7 intervalles au lieu de 5 comme dans l'exemple précèdent. DEPV reconnaît automatiquement le modèle à utiliser à partir de la taille du dictionnaire \pyth{bornes} fournit à la classe \pyth{DE}:
+Si on veut utiliser le modèle double diode, il suffit de donner 7 intervalles au lieu de 5 comme premier argument. DEPV reconnaît automatiquement le modèle à utiliser à partir de la taille du dictionnaire \pyth{bornes} fournit à la classe \pyth{DE}:
 \begin{minted}[mathescape,
                linenos,
                numbersep=5pt,
                gobble=2,
                frame=lines,
                framesep=2mm,
-               fontsize=\small]{Python}
-  b = {'rp':  [2, 100],
+               fontsize=\scriptsize]{Python}
+  bornes = {'rp':  [2, 100],
        'rs':  [0, 1],
        'a1':  [1, 2],
        'a2':  [1, 2],
@@ -202,15 +197,10 @@ Si on veut utiliser le modèle double diode, il suffit de donner 7 intervalles a
   T = 45 + 275.15
   Ns, Np = 36, 1
   exp = read_csv("data/PWP.csv")
-  
-  PWP = DE(b, exp, Ns, Np, T)
-  
+  PWP = DE(bornes, exp, Ns, Np, T)
   PWP.solve()
-  PWP.plot_fit_hist()
   PWP.plot_result(print_params=True)
 \end{minted}
-
-
 Dans le cas où on n'a pas besoin d'accéder à cette fonctionnalité programmatiquement, il suffit d'utiliser directement l'interface graphique de DEPV. On a toujours besoin de fournir le fichier contenant les données expérimentales, la température, les bornes et les cellules en série et en parallèle (figure \ref{fig:depvmain}). Les résultats et les graphes sont affichés par l'interface dans la figure \ref{fig:depvres}
 
 \begin{figure}[H]
@@ -228,5 +218,48 @@ Dans le cas où on n'a pas besoin d'accéder à cette fonctionnalité programmat
     \label{fig:depvres}
   \end{center}
 \end{figure}
+
+\section{Stratégie métaheuristique}
+Comme on l'a déjà mentionné, la sélection des paramètres de l'ED, notamment le Facteur de Mutation $F$ et le taux de croisement $CR$, reste assez arbitraire et empirique malgré son influence déterminante sur la convergence de la technique. Bien que Storn et Price \cite{Price2005} recommandent des valeurs de $F$ proche de $1$ et que les limites déterminées par Zaharie et al. \cite{Zaharie2002} sont souvent correctes, il existe des cas atypiques comme l'estimation des états fondamentaux des agrégats $Si_{x}-H$ par Chakraborti et al. (2001) \cite{Chakraborti2001}. Dans leur cas, l'ED a réussi à minimiser l'énergie des agrégats atomiques avec des facteurs de mutation entre $0.0001$ et $0.4$.
+
+On propose donc une technique métaheuristique permettant de déterminer ces paramètres sans faire recours à l'arbitraire/l'empirique. Cette solution consiste à utiliser l'ED à un niveau plus haut pour déterminer les paramètres à utiliser pour l'ED usuelle pour l'estimation des paramètres comme on a décrit dans le chapitre précèdent. Le nouvel espace de recherche est donc à deux dimensions seulement ($F$ et $CR$) et par conséquent n'a besoin que d'une population de $10 \times D = 20$ vecteurs solutions. En effet, chaque vecteur solution représente une instance entière d'Évolution Différentielle avec des $F$ et $CR$ différents. La fonction objectif est simplement la valeur fitness du meilleur résultat obtenu avec un $F$ et $CR$ spécifique. Il est vrai que cette technique apparaît très coûteuse en termes de calcul, puisque dans ce cas, chaque vecteur solution ne pourra être évalué qu'après sa propre instance d'ED ait convergé. Dans l'ED "standard" décrite dans le chapitre 2, une instance effectue $N_P \times Gen_{max} = 100 \times 200 = 20000$ évaluations de la fonction objectif. Avec cette ED "d'ordre supérieur", le nombre d'évaluations sera $N_{P}^{\text{higher order}} \times Gen_{max}^{\text{higher order}} \times 20000$. Ce qui correspond à $\num{2e6}$ évaluations pour $N_{P}^{\text{higher order}} = 20$ et  $Gen_{max}^{\text{higher order}} = 50$. En revanche, une seule exécution de cette technique au préalable et nécessaire. Les valeurs obtenues avec cette technique peuvent par la suite être réutilisées plusieurs fois avec l'ED standard et seulement les 20000 évaluations. Le nature coûteuse de cette technique est donc moins problématique puisque elle n'est utile que dans les cas où les ressources en capacité de calcul et en temps ne sont pas déterminantes. Par ailleurs, l'utilisation de cette technique permet de choisir les paramètres optimaux et donc à accélérer la convergence pour les cas où la rapidité des calculs est effectivement essentielle (Estimation des paramètres en temps réel par exemple). Le pseudo-code de cette technique est présenté dans l'algorithme \ref{alg:metaheuristic}. Notons que dans la ligne 26, l'évaluation de la fonction objectif $f(V_{j,gen})$ contient une instance entière de l'algorithme \ref{alg:debestbin} avec le facteur de mutation et taux de croisement fournis par le vecteur $V_{j,gen}$.
+
+\begin{algorithm}[H]
+  $CR^{\text{higher order}} \gets$ Taux de croisement\;
+  $D^{\text{higher order}} \gets$ Dimensions de l'espace de recherche (2 dans ce cas)\;
+  $N_{P}^{\text{higher order}} \gets$ Nombre de population ($10 \times D$)\;
+  $gen = 0$\;
+  Initialisation de la population $P_0 = [V_0, V_1, .., V_{N_P}]$\;
+  \For{$i = 0 \text{\ to\ } N_P$}{
+    $V_{min} = [V_{F,min}, V_{CR,min}]$\;
+    $V_{max} = [V_{F,max}, V_{CR,max}]$\;
+    $V_{i} = V_{min} + \text{rand}[0, 1] (V_{max} - V_{min})$\;
+  }
+  \While{$gen < gen_{max}$}{
+    \For{$j = 0$\ to\ $N_P$}{
+      $V_{j,gen} = [V_{F,j,gen}, V_{CR,j,gen}]$\;
+      Choisir le vecteur de base et deux vecteurs aléatoires $V_{r1}\ \text{et}\ V_{r2} \in P_{gen}$\;
+      $V_{base} = V \in P_{gen} \mid \forall (K \in P_{gen}), \quad f(V) \leq f(K)$\;
+      Mutation :\\
+      $M_{j,gen} = V_{base} + F^{\text{higher order}} (V_{r1} - V_{r2})  $\;
+      Croisement : \\
+      $T_{j,gen} = [T_{F,j,gen}, T_{CR,j,gen}]$\;
+      \eIf{rand$[0, 1] < CR^{\text{higher order}}\ $ or\ $j = j_{rand}$}{
+        $T_{i,j,gen} = M_{i,j,gen}$\;
+      }{
+        $T_{i,j,gen} = V_{i,j,gen}$\;
+      }
+      Sélection :\\
+      \eIf{$f(T_{j,gen}) < f(V_{j,gen})$}{
+        $V_{j,gen + 1} = T_{j, gen}$\;
+      }{
+      $V_{j,gen + 1} = V_{j, gen}$\;
+      }
+    }
+      $gen = gen + 1$\;
+  }
+  \caption{Stratégie métaheuristique pour déterminer $F$ et $CR$}
+  \label{alg:metaheuristic}
+\end{algorithm}
 
 \section{Conclusion}

@@ -16,9 +16,18 @@ L'Évolution Différentielle (ED) est un algorithme évolutionnaire développé 
 
 \subsection{Initialisation}
 
-\begin{wrapfigure}{r}{0.5\textwidth}
-  \vspace*{-10pt} 
-    \begin{tikzpicture}[scale=0.65, >=stealth]
+La convergence des techniques d'optimisation non-linéaires est toujours conditionnée par un "bon" choix des conditions initiales. Dans le cas de l'évolution différentielle, il s'agit de l'ensemble des vecteurs constituants la population initiale. Si un vecteur solution quelconque se constitue de $D$ paramètres, notre espace de recherche est dit à $D$ dimensions, ce qui fait que notre population initiale se compose de $N_P$ vecteurs à $D$ éléments. Mais pour pouvoir effectuer l'initialisation de la population, les bornes de l'espace de recherche doivent être spécifiées. Chacun des $D$ paramètres doit avoir une borne supérieure et inférieure, ce qui fait un total de $2 \times D$ valeurs pour spécifier complètement les limites de l'espace. Reste le mécanisme utilisé pour effectivement générer les vecteurs dans cet espace borné. Pour couvrir entièrement et uniformément cet espace, il faut, pour chaque paramètre de chaque vecteur, générer aléatoirement et uniformément une valeur comprise dans la fourchette déterminée par un générateur de nombres aléatoires. En considérant que l'indice $j$ associé à un vecteur $\vec{V}$ désigne le $j-$ème paramètre, on peut accomplir ceci avec la formule \ref{eq:popinit}. 
+
+\begin{equation}
+  \label{eq:popinit}
+  V_j = V_{\text{min},j} + \text{rand}[0, 1](V_{\text{max},j} - V_{\text{min},j})
+\end{equation} 
+
+On suppose avoir accès à une fonction $\text{rand}[0, 1]$, qui joue le rôle du générateur de nombres aléatoire uniformes et que $0 \leq \text{rand}[0, 1] < 1$. 
+$V_{\text{min},j}$ et $V_{\text{max},j}$ sont les bornes inférieures   et supérieures du $j-$ème paramètres, respectivement. Figure \ref{fig:initpop} montre un exemple d'une population initialisée dans un espace de recherche 2 dimensionnel. Les contours sont les \textit{"isolignes"} de la fonction objectif, le minimum global doit être à l'intérieur de la fourchette spécifiée. 
+
+\begin{figure}[H]
+    \begin{tikzpicture}[>=stealth]
         \draw[help lines, color=gray!30, dashed] (0,0) grid (9.9,8.9);
         \draw[->,ultra thick] (-.5,0)--(10,0) node[right]{$V_1$};
         \draw[->,ultra thick] (0,-.5)--(0,9) node[above]{$V_2$};
@@ -48,18 +57,7 @@ L'Évolution Différentielle (ED) est un algorithme évolutionnaire développé 
     \end{tikzpicture}
     \caption{Exemple d'une population initialisée dans un espace de recherche à deux dimensions. Dans ce cas $D = 2$, $N_P = 10$ et l'indice de génération $g = 0$ puisqu'il s'agit de la population initiale}
     \label{fig:initpop}
-    \vspace*{30pt}
-\end{wrapfigure}
-
-La convergence des techniques d'optimisation non-linéaires est toujours conditionnée par un "bon" choix des conditions initiales. Dans le cas de l'évolution différentielle, il s'agit de l'ensemble des vecteurs constituants la population initiale. Si un vecteur solution quelconque se constitue de $D$ paramètres, notre espace de recherche est dit à $D$ dimensions, ce qui fait que notre population initiale se compose de $N_P$ vecteurs à $D$ éléments. Mais pour pouvoir effectuer l'initialisation de la population, les bornes de l'espace de recherche doivent être spécifiées. Chacun des $D$ paramètres doit avoir une borne supérieure et inférieure, ce qui fait un total de $2 \times D$ valeurs pour spécifier complètement les limites de l'espace. Reste le mécanisme utilisé pour effectivement générer les vecteurs dans cet espace borné. Pour couvrir entièrement et uniformément cet espace, il faut, pour chaque paramètre de chaque vecteur, générer aléatoirement et uniformément une valeur comprise dans la fourchette déterminée par un générateur de nombres aléatoires. En considérant que l'indice $j$ associé à un vecteur $\vec{V}$ désigne le $j-$ème paramètre, on peut accomplir ceci avec la formule \ref{eq:popinit}. 
-
-\begin{equation}
-  \label{eq:popinit}
-  V_j = V_{\text{min},j} + \text{rand}[0, 1](V_{\text{max},j} - V_{\text{min},j})
-\end{equation} 
-
-On suppose avoir accès à une fonction $\text{rand}[0, 1]$, qui joue le rôle du générateur de nombres aléatoire uniformes et que $0 \leq \text{rand}[0, 1] < 1$. 
-$V_{\text{min},j}$ et $V_{\text{max},j}$ sont les bornes inférieures   et supérieures du $j-$ème paramètres, respectivement. Figure \ref{fig:initpop} montre un exemple d'une population initialisée dans un espace de recherche 2 dimensionnel. Les contours sont les \textit{"isolignes"} de la fonction objectif, le minimum global doit être à l'intérieur de la fourchette spécifiée. 
+\end{figure}
 \clearpage
 
 \subsection{Mutation}
@@ -67,9 +65,16 @@ $V_{\text{min},j}$ et $V_{\text{max},j}$ sont les bornes inférieures   et supé
 \nomenclature[1vmut]{$\vec{M}_{i}$}{Vecteur mutant}
 \nomenclature[1vessai]{$\vec{T}_{i}$}{Vecteur d'essai}
 
-\begin{wrapfigure}{r}{0.5\textwidth}
-  \vspace*{-10pt} 
-    \begin{tikzpicture}[scale=0.65, >=stealth]
+Après l'initialisation de la population, l'ED modifie, croise et recombine la population pour produire des vecteurs d'essai (un nombre $N_P$ de ces vecteurs) qui seront comparés avec les vecteurs cibles qui leurs correspondent dans la population. La \textit{Mutation} dans l'ED est en fait une "mutation différentielle". Elle consiste a ajouter la différence de deux vecteurs choisis aléatoirement de la population, multipliée par un facteur de pondération ou "Facteur de Mutation", à un troisième vecteur de base distinct. Cette opération produit un vecteur mutant $M$ selon l'équation \ref{eq:mutant}. L'indice $i$ indique le $i$-ème vecteur de la population, et $gen$ la génération où l'on est. 
+Il n'y a pas de limite dure sur le Facteur de Mutation $F$, mais les valeurs supérieures à $1$ sont rarement considérées. Dans notre cas, on considère que $F \in [0, 1]$. Il existe plusieurs stratégies pour choisir le $\vec{V}_{base}$, le seul prérequis étant qu'il soit distinct du vecteur cible. Dans ce travail nous utiliserons exclusivement le choix du vecteur ayant la meilleure qualité ou valeur de "fitness" calculée par la fonction objectif. Les vecteurs de la différence $\vec{V}_{r1,gen}$ et $V_{r2,gen}$ sont choisis aléatoirement de la population pour chaque vecteur mutant et ne doivent qu'être distincts l'un de l'autre et des vecteurs cible $\vec{V}_{i, gen}$ et de base $\vec{V}_{base, gen}$.
+
+\begin{equation}
+  \label{eq:mutant}
+  \vec{M}_{i,gen} = \vec{V}_{base,gen} + F (\vec{V}_{r1,gen} - \vec{V}_{r2,gen})  
+\end{equation}
+
+\begin{figure}[H]
+    \begin{tikzpicture}[>=stealth]
         \draw[help lines, color=gray!30, dashed] (0,0) grid (9.9,8.9);
         \draw[->,ultra thick] (-.5,0)--(10,0) node[right]{$V_1$};
         \draw[->,ultra thick] (0,-.5)--(0,9) node[above]{$V_2$};
@@ -100,19 +105,12 @@ $V_{\text{min},j}$ et $V_{\text{max},j}$ sont les bornes inférieures   et supé
     \end{tikzpicture}
     \caption{L'opération de mutation différentielle ajoute $F (\vec{V}_{r1,gen} - \vec{V}_{r2,gen})$ au vecteur de base $\vec{V}_{base,gen}$ pour produire un mutant $\vec{M}_{i,gen}$}
     \label{fig:mutant2}
-    \vspace*{30pt}
-\end{wrapfigure}
-
-Après l'initialisation de la population, l'ED modifie, croise et recombine la population pour produire des vecteurs d'essai (un nombre $N_P$ de ces vecteurs) qui seront comparés avec les vecteurs cibles qui leurs correspondent dans la population. La \textit{Mutation} dans l'ED est en fait une "mutation différentielle". Elle consiste a ajouter la différence de deux vecteurs choisis aléatoirement de la population, multipliée par un facteur de pondération ou "Facteur de Mutation", à un troisième vecteur de base distinct. Cette opération produit un vecteur mutant $M$ selon l'équation \ref{eq:mutant}. L'indice $i$ indique le $i$-ème vecteur de la population, et $gen$ la génération où l'on est. 
-Il n'y a pas de limite dure sur le Facteur de Mutation $F$, mais les valeurs supérieures à $1$ sont rarement considérées. Dans notre cas, on considère que $F \in [0, 1]$. Il existe plusieurs stratégies pour choisir le $\vec{V}_{base}$, le seul prérequis étant qu'il soit distinct du vecteur cible. Dans ce travail nous utiliserons exclusivement le choix du vecteur ayant la meilleure qualité ou valeur de "fitness" calculée par la fonction objectif. Les vecteurs de la différence $\vec{V}_{r1,gen}$ et $V_{r2,gen}$ sont choisis aléatoirement de la population pour chaque vecteur mutant et ne doivent qu'être distincts l'un de l'autre et des vecteurs cible $\vec{V}_{i, gen}$ et de base $\vec{V}_{base, gen}$.
-
-\begin{equation}
-  \label{eq:mutant}
-  \vec{M}_{i,gen} = \vec{V}_{base,gen} + F (\vec{V}_{r1,gen} - \vec{V}_{r2,gen})  
-\end{equation}
+\end{figure}
 
 \subsection{Croisement}
-La opération de mutation est suivie d'un croisement ou \textit{recombinaison discrète}. Elle consiste à construire le vecteur d'essai $\vec{T}_{i,gen}$ à partir des éléments (i.e. paramètres) de deux vecteurs différents selon une probabilité spécifiée. Chaque élément $j$ du vecteur d'essai est choisi selon la formule \ref{eq:cross}
+La opération de mutation est suivie d'un croisement ou \textit{recombinaison discrète}. Elle consiste à construire le vecteur d'essai $\vec{T}_{i,gen}$ à partir des éléments (i.e. paramètres) de deux vecteurs différents selon une probabilité spécifiée. Chaque élément $j$ du vecteur d'essai est choisi selon la formule \ref{eq:cross}.
+
+
 \begin{equation}
   \label{eq:cross}
   T_{j,i,gen} =
@@ -121,6 +119,7 @@ La opération de mutation est suivie d'un croisement ou \textit{recombinaison di
     V_{j,i,gen} & \text{sinon}
   \end{cases}
 \end{equation}
+
 $CR \in [0,1]$ détermine la probabilité que le paramètre provienne du vecteur mutant tant que $\text{rand}[0, 1]$ est effectivement un générateur aléatoire uniforme. Le taux de croisement $CR$ est l'un des paramètres spécifiés par l'utilisateur au début. Un nombre aléatoire $j_{rand}$ est aussi choisi tel que $0 \leq j_{rand} < D$ pour s'assurer que le nouveau vecteur d'essai ne duplique pas complètement le vecteur cible $\vec{V}_{i,gen}$.
 
 \subsection{Sélection}
@@ -148,7 +147,10 @@ Dans notre application de l'ED sur le problème d'identification des paramètres
   f(\vec{V}_{sol}) = RMSE = \sqrt{\frac{1}{N} \sum_{i = 1}^{N} (I_{i,exp} - I_{i, cal}(\vec{V}_{sol}))^2 }
 \end{equation}
 
-\begin{algorithm}
+\section{Pseudo-code}
+Une implémentation de L'Évolution Différentielle en pseudo-code est la suivante:
+
+\begin{algorithm}[H]
   $F \gets$ Facteur de mutation\;
   $CR \gets$ Taux de croisement\;
   $N_P \gets$ Taille de la population\;

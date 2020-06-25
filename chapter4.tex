@@ -1,8 +1,10 @@
 \chapter{Résultats et analyse}
 
 \section{Introduction}
+Dans ce chapitre final nous allons analyser et discuter les résultats de l'application de l'ED. Les cas d'études considérés sont une cellule très largement étudiée dans la littérature et des module PV en mono-Si et poly-Si. On effectue aussi une analyse sur la stabilité et cohérence de la méthode avant de conclure avec une comparaison entre la méthode standard et le stratégie métaheuristique proposée à la fin du troisième chapitre. Tous les calculs effectués et les résultats on été obtenus avec \textit{Python 3.8.3} avec l'implementation standard \textit{CPython} et CPU \textit{Intel i5-7200U} avec une fréquence d'horloge maximale de 3.1\si{\giga\hertz} sous le système d'exploitation \textit{Arch Linux x86\_64} Kernel version \textit{5.7.2 arch1-1.}
 
-\section{Cas 1: Cellule 57-mm de RTC France}
+\section{Cas d'études et résultats}
+\subsection{Cas 1: Cellule 57-mm de RTC France}
 
 Ce premier cas d'étude concerne la cellule en silicium de RTC France avec un diamètre de 57 mm qui a été très largement étudiée dans la littérature. Sa courbe caractéristique a été mesurée dans des conditions de température $T = \SI{33}{\celsius}$ et irradiance solaire $\SI{1000}{\watt\per\square\meter}$ et comprend 26 points expérimentaux (figure \ref{fig:RTCexp}). Figure \ref{fig:RTCres}.a montre que la caractéristique expérimentale et calculée par l'ED sont graphiquement quasi-identiques. Figure \ref{fig:RTCres}.b montre l'évolution de la moyenne des valeurs de fitness des vecteurs évalués par la fonction objectif dans chaque génération consécutive. On constate que dès la 50\textsuperscript{ème} génération, l'ED a pratiquement déjà convergé.
 
@@ -114,7 +116,7 @@ En ce qui concerne le modèle double diode, les deux facteurs d'idéalité $a_1$
 
 \nomenclature{GSA}{Gravitational Search Algorithm}
 
-\section{Cas 2: Module monocristallin Schutten Solar STM6-40/36}
+\subsection{Cas 2: Module monocristallin Schutten Solar STM6-40/36}
 
 Nous nous concernons dans ce deuxième cas d'étude du module monocristallin Schutten Solar STM6-40/36 composé de 36 cellules ($156\si{\milli\meter}\times 156\si{\milli\meter}$) en série. Les données expérimentales ont été prises à une température de 51\si{\celsius}. Une comparaison des résultats de l'ED avec d'autres méthodes est présentée dans le tableau \ref{tab:stm6}. La correspondance de la caractéristique calculée par l'ED aux points experimentaux est démontrée graphiquement dans la figure \ref{fig:STM6res}. Malgré la distribution irrégulière des points, l'ED arrive a produire une solution précise. Sa précision et de même ordre de grandeur que ED3P \cite{Chin2019} mais elle est supérieure aux techniques des colonies des abeilles artificielles (ABC) \cite{Oliva2014}, de sa version améliorée par Oliva et al. (CIABC) \cite{Oliva2017a} et Chaotic Whale Optimization Algorithm (CWOA) \cite{Oliva2017}.
 
@@ -196,7 +198,7 @@ Les résultats de l'ED avec le modèle double diode sur le module STM6-40/36 son
   \end{center}
 \end{table}
 
-\section{Cas 3: Module polycristallin Photowatt-PWP 201}
+\subsection{Cas 3: Module polycristallin Photowatt-PWP 201}
 
 Le 3\textsuperscript{ème} cas concerne le module polycristallin Photowatt-PWP 201 composé de 36 cellules en série. Les données expérimentales ont été prise dans des conditions d'irradiation de $1000 \si{\watt\per\square\meter}$ et une température de $T = 45 \si{\celsius}$. Le tableau \ref{tab:pwpsingle} compare les résultats obtenus par Évolution Différentielle contre d'autres méthodes dans la littérature. Les valeurs des paramètres simple diode retrouvée par l'ED sont très similaires aux autres, mais sont plus précises en termes de RMSE. Figure \ref{fig:pwpsingle} montre la courbe caractéristique calculée (a) et la courbe de convergence de l'ED (b). Les bornes de l'espace de recherche sont identiques à celle de la cellule RTC France (Tableau \ref{tab:singleboundaries}) sauf pour le courant de saturation qu'on limite à $\num{1e-7} \leq I_{0} \leq \num{1e-5}$. Le modèle double diode est plus précis que le modèle simple diode avec l'ED, mais ce dernier reste plus précis que les autres techniques similaires.
 
@@ -256,7 +258,8 @@ Le 3\textsuperscript{ème} cas concerne le module polycristallin Photowatt-PWP 2
   \end{center}
 \end{table}
 
-
+\subsection{Remarques}
+Le modèle double diode contient deux termes exponentiels nécessitant deux évaluations de la fonction W de Lambert pour chaque point expérimental, ce qui est relativement coûteux d'un point de vue de calcul numérique. Par ailleurs, puisque tous les paramètres sont traités indépendamment des autres, l'espace de recherche est effectivement à 7 dimensions. Puisque la qualité des résultats des modèles simple et double diode est quasi-identique dans le cas de la cellule RTC France (Tableaux \ref{tab:RTCres} et \ref{tab:RTCresdouble} respectivement) ainsi que pour le module photovoltaïque monocristallin Schutten Solar STM6-40/36 (Tableaux \ref{tab:stm6} et \ref{tab:STM6double}), on constate que le modèle simple diode et très adéquat en terme de précision et supérieur en terme d'efficacité et rapidité de calcul.
 
 \section{Analyse et cohérence de l'ED}
 
@@ -322,6 +325,45 @@ La cohérence des différents essais concernant la $R_s$ et le $a$ du module Pho
   \end{center}
 \end{table}
 
-\section{Conclusion}
+\section{Analyse de la stratégie métaheuristique}
+Pour analyser la stratégie métaheuristique proposée dans le dernier chapitre, nous allons prendre le module polycristallin Photowatt-PWP 201.
+Conformément aux recommandations de Storn et Price, nous avons choisi comme valeurs standard du facteur de mutation et du taux de croisement $0.7$ et $0.8$, respectivement. En fait les paramètres retrouvés dans le cas d'étude 3 avec les courbes caractéristique et de convergence, ont tous été retrouvé par l'ED configuré avec ces valeurs par défaut. Pour appliquer la métaheuristique, un nombre de population relativement faible est adéquat puisque notre espace de recherche est 2-dimensionnel: $N_P^{\text{higher order}} = 10 \times D = 20$. On limite aussi le nombre maximal de générations à $Gen_{max}^{\text{higher order}} = 50$. Pratiquement, la fonction objectif est donc la valeur fitness \textit{à la 50\textsuperscript{ème} itération}. Le fait que l'ED risque de pas avoir déjà converger ne nous pose pas de problèmes, puisque notre but est de retrouver les valeurs de $F$ et $CR$ permettant la convergence la plus rapide\footnote{Convergence rapide mais non-prematurée} que possible. Les paramètres de la métaheuristique elle-même sont $F^{\text{higher order}} = 0.8$ et $CR^{\text{higher order}} = 0.8$. 
 
-Le modèle double diode contient deux termes exponentiels nécessitant deux évaluations de la fonction W de Lambert pour chaque point expérimental, ce qui est relativement coûteux d'un point de vue de calcul numérique. Par ailleurs, puisque tous les parametres sont traités indépendamment des autres, l'espace de recherche est effectivement à 7 dimensions. Puisque la qualité des résultats des modèles simple et double diode est quasi-identique dans le cas de la cellule RTC France (Tableaux \ref{tab:RTCres} et \ref{tab:RTCresdouble} respectivement) ainsi que pour le module photovoltaïque monocristallin Schutten Solar STM6-40/36 (Tableaux \ref{tab:stm6} et \ref{tab:STM6double}), on constate que le modèle simple diode et très adéquat en terme de précision et supérieur en terme d'efficacité et rapidité de calcul.
+Les résultats de cette stratégies pour le module Photowatt-PWP 201 sont:
+\begin{equation}
+  F = 0.55, \quad CR = 0.94
+\end{equation}
+
+Figure \ref{fig:metaconv} compare les courbes de convergences entre l'ED avec et sans stratégie métaheuristique. Malgré le fait que le facteur de mutation retrouvé est relativement plus bas que les recommandations de Storn et Price, il est toujours compris dans les limites de Zaharie et al. \cite{Zaharie2002}. Notons que la rapidité de convergence est sensiblement supérieure dans la figure \ref{fig:metaconv}.a, l'ED a déjà convergé à l'itération 25, alors que l'ED standard a besoin de deux fois plus d'itérations\footnote{Itérations et générations sont équivalentes dans ce cas}. En terme de temps de calcul, on teste dans le mêmes conditions les deux méthodes en les "chronométrant" avec Python. L'ED standard s'exécute au bout d'un temps moyen de $1.68535 \si{\second}$ sur 30 essais indépendants et un écart-type de $\num{4.751e-4}$. Pour l'ED avec métaheuristique, le temps moyen d'exécution est $0.82392 \si{\second}$, ce qui correspond à une diminution de 51\% du temps de calcul. Il n'y a pas de compromis envers la stabilité et la cohérence puisque l'écart-type des RMSEs est $\num{4.0162e-4}$. Figure \ref{fig:exectimes} montre les différents temps d'exécution pendant 30 essais avec les deux méthodes. Les valeurs initialement décroissantes sont probablement dues à l'utilisation des cache L1, et L2 du processeur.
+
+\begin{figure*}
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{resources/pwp/metafit.png}
+        \caption{Convergence de l'ED configurée avec les parametres retrouvée par la métaheuristique}
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{resources/pwp/fitness.png}
+        \caption{Convergence de l'ED avec les paramètres standard}
+    \end{subfigure}
+    \caption{Comparaison de l'ED avec et sans métaheuristique}
+    \label{fig:metaconv}
+\end{figure*}
+
+\begin{figure*}
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{resources/metaexec.png}
+        \caption{Avec stratégie métaheuristique}
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{resources/stdexec.png}
+        \caption{Avec ED standard}
+    \end{subfigure}
+    \caption{Comparaison des temps de calcul pendant 30 essais}
+    \label{fig:exectimes}
+\end{figure*}
+
+\section{Conclusion}
