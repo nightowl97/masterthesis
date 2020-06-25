@@ -12,8 +12,11 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage{graphicx} %remove demo for final version
 \usepackage{siunitx}
+
 \usepackage{floatrow}
-\usepackage{xcolor}
+\floatsetup[table]{capposition=top} % caption position above table
+
+\usepackage[dvipsnames]{xcolor}
 \usepackage{subcaption}
 \usepackage{tabularx}
 
@@ -49,9 +52,15 @@
 %\usepackage{charter}
 
 % Python syntax highlighting
+\usepackage{minted}
+\usepackage{listings}
 \usepackage{pythonhighlight}
 
-\usepackage[margin=2cm]{geometry}
+%\setsansfont{Calibri}
+%\setmonofont{Consolas}
+
+
+\usepackage[a4paper, left=2cm, right=2cm, top=1.5cm, bottom=2cm]{geometry}
 
 %check font size
 \makeatletter
@@ -69,12 +78,16 @@
 \setcounter{tocdepth}{3}
 
 \begin{document}
+
+  \renewcommand{\theFancyVerbLine}{\sffamily\textcolor[rgb]{0.5,0.5,0.5}{\scriptsize\arabic{FancyVerbLine}}}
+
   \include{titlepage}
   \shipout\null
   \include{introduction}
   \include{chapter1}
   \include{chapter2}
   \include{chapter3}
+  \include{chapter4}
   \bibliographystyle{ieeetr}
   \bibliography{masterlibrary}
 \end{document}

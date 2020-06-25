@@ -26,3 +26,6 @@
 *.ilg
 *.nls
 *.nls~
+
+*.dvi
+/_minted-main
