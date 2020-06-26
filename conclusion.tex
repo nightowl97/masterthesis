@@ -1,0 +1,119 @@
+\chapter*{Conclusion générale}
+\label{sec:conc}
+\addcontentsline{toc}{chapter}{\nameref{sec:conc}}
+
+
+\begin{appendices}
+  
+\chapter{Évolution différentielle avec Python}
+  
+  Le fichier contenant contenant la logique principale de la technique est \pyth{objects.py}:
+
+  \inputminted[mathescape,
+               linenos,
+               numbersep=5pt,
+               frame=lines,
+               framesep=2mm,
+               breaklines=true,
+               fontsize=\scriptsize]{Python}{/home/youssef/PycharmProjects/DEPV/objects.py}
+  
+\chapter{Code de la stratégie métaheuristique}
+  
+    \inputminted[mathescape,
+               linenos,
+               numbersep=5pt,
+               frame=lines,
+               framesep=2mm,
+               breaklines=true,
+               fontsize=\scriptsize]{Python}{/home/youssef/PycharmProjects/DEPV/metaheuristic.py}
+               
+\chapter{Code de l'analyse de cohérence}
+\inputminted[mathescape,
+               linenos,
+               numbersep=5pt,
+               frame=lines,
+               framesep=2mm,
+               breaklines=true,
+               fontsize=\scriptsize]{Python}{/home/youssef/PycharmProjects/DEPV/consistency.py}
+\inputminted[mathescape,
+               linenos,
+               numbersep=5pt,
+               frame=lines,
+               framesep=2mm,
+               breaklines=true,
+               fontsize=\scriptsize]{Python}{/home/youssef/PycharmProjects/DEPV/metaconsistency.py}
+               
+\chapter{Données expérimentales}
+\begin{figure}[H]
+  \label{tab:apprtc}
+  \begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \captionof{table}{Cellule R.T.C France 57 mm}
+    \pgfplotstabletypeset[
+                          multicolumn names, % allows to have multicolumn names
+                          col sep=comma, % the seperator in our .csv file
+                          display columns/0/.style={
+                                                    column name=$Voltage$, % name of first column
+                                                    column type={S},string type},  % use siunitx for formatting
+                          display columns/1/.style={
+                                                    column name=$Current$,
+                                                    column type={S},string type},
+                          every head row/.style={
+                                                    before row={\toprule}, % have a rule at top
+                                                    after row={
+                                                                \si{\volt} & \si{\ampere}\\ % the units seperated by &
+                                                                \midrule} % rule under units
+                                                                },
+                          every last row/.style={after row=\bottomrule}, % rule at bottom
+                          ]{/home/youssef/PycharmProjects/DEPV/data/RTC33D1000W.csv} % filename/path to file
+  \end{minipage}%
+  \begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \captionof{table}{Module Schutten Solar STM6-40/36}
+    \pgfplotstabletypeset[
+                          multicolumn names, % allows to have multicolumn names
+                          col sep=comma, % the seperator in our .csv file
+                          display columns/0/.style={
+                                                    column name=$Voltage$, % name of first column
+                                                    column type={S},string type},  % use siunitx for formatting
+                          display columns/1/.style={
+                                                    column name=$Current$,
+                                                    column type={S},string type},
+                          every head row/.style={
+                                                    before row={\toprule}, % have a rule at top
+                                                    after row={
+                                                                \si{\volt} & \si{\ampere}\\ % the units seperated by &
+                                                                \midrule} % rule under units
+                                                                },
+                          every last row/.style={after row=\bottomrule}, % rule at bottom
+                          ]{/home/youssef/PycharmProjects/DEPV/data/STM6_4036} % filename/path to file
+  \end{minipage}
+\end{figure}
+
+\begin{table}
+    \centering
+    \captionof{table}{Module Photowatt-PWP 201}
+      \pgfplotstabletypeset[
+                            multicolumn names, % allows to have multicolumn names
+                            col sep=comma, % the seperator in our .csv file
+                            display columns/0/.style={
+                                                      column name=$Voltage$, % name of first column
+                                                      column type={S},string type},  % use siunitx for formatting
+                            display columns/1/.style={
+                                                      column name=$Current$,
+                                                      column type={S},string type},
+                            every head row/.style={
+                                                      before row={\toprule}, % have a rule at top
+                                                      after row={
+                                                                  \si{\volt} & \si{\ampere}\\ % the units seperated by &
+                                                                  \midrule} % rule under units
+                                                                  },
+                            every last row/.style={after row=\bottomrule}, % rule at bottom
+                            ]{/home/youssef/PycharmProjects/DEPV/data/PWP} % filename/path to file
+\end{table}
+
+\end{appendices}
+
+% \section{objects.py}
+%
+% \section{examples.py}

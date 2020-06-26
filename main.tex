@@ -13,8 +13,8 @@
 \usepackage{graphicx} %remove demo for final version
 \usepackage{siunitx}
 
-\usepackage{floatrow}
-\floatsetup[table]{capposition=top} % caption position above table
+% \usepackage{floatrow}
+% \floatsetup[table]{capposition=top} % caption position above table
 
 \usepackage[dvipsnames]{xcolor}
 \usepackage{subcaption}
@@ -56,8 +56,14 @@
 \usepackage{listings}
 \usepackage{pythonhighlight}
 
-%\setsansfont{Calibri}
-%\setmonofont{Consolas}
+% Annexes
+\usepackage[toc]{appendix}
+\renewcommand{\appendixtocname}{Annexes}
+
+% Generate tables from .csv
+\usepackage{pgfplotstable}
+\usepackage{booktabs} % For \toprule, \midrule and \bottomrule
+\usepackage{caption}
 
 
 \usepackage[a4paper, left=2cm, right=2cm, top=1.5cm, bottom=2cm]{geometry}
@@ -79,7 +85,7 @@
 
 \begin{document}
 
-  \renewcommand{\theFancyVerbLine}{\sffamily\textcolor[rgb]{0.5,0.5,0.5}{\scriptsize\arabic{FancyVerbLine}}}
+%   \renewcommand{\theFancyVerbLine}{\sffamily\textcolor[rgb]{0.5,0.5,0.5}{\scriptsize\arabic{FancyVerbLine}}}
 
   \include{titlepage}
   \shipout\null
@@ -88,6 +94,7 @@
   \include{chapter2}
   \include{chapter3}
   \include{chapter4}
+  \include{conclusion}
   \bibliographystyle{ieeetr}
   \bibliography{masterlibrary}
 \end{document}
