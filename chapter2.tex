@@ -27,6 +27,7 @@ On suppose avoir accès à une fonction $\text{rand}[0, 1]$, qui joue le rôle d
 $V_{\text{min},j}$ et $V_{\text{max},j}$ sont les bornes inférieures   et supérieures du $j-$ème paramètres, respectivement. Figure \ref{fig:initpop} montre un exemple d'une population initialisée dans un espace de recherche 2 dimensionnel. Les contours sont les \textit{"isolignes"} de la fonction objectif, le minimum global doit être à l'intérieur de la fourchette spécifiée. 
 
 \begin{figure}[H]
+    \centering
     \begin{tikzpicture}[>=stealth]
         \draw[help lines, color=gray!30, dashed] (0,0) grid (9.9,8.9);
         \draw[->,ultra thick] (-.5,0)--(10,0) node[right]{$V_1$};
@@ -74,6 +75,7 @@ Il n'y a pas de limite dure sur le Facteur de Mutation $F$, mais les valeurs sup
 \end{equation}
 
 \begin{figure}[H]
+    \centering
     \begin{tikzpicture}[>=stealth]
         \draw[help lines, color=gray!30, dashed] (0,0) grid (9.9,8.9);
         \draw[->,ultra thick] (-.5,0)--(10,0) node[right]{$V_1$};
@@ -148,7 +150,7 @@ Dans notre application de l'ED sur le problème d'identification des paramètres
 \end{equation}
 
 \section{Pseudo-code}
-Une implémentation de l'Évolution Différentielle en pseudo-code est la suivante:
+Une implémentation de l'Évolution Différentielle en pseudo-code est la suivante:\\
 
 \begin{algorithm}[H]
   $F \gets$ Facteur de mutation\;
