@@ -6,7 +6,11 @@ Dans ce chapitre final nous allons analyser et discuter les résultats de l'appl
 \section{Cas d'études et résultats}
 \subsection{Cas 1: Cellule 57-mm de R.T.C France}
 
-Ce premier cas d'étude concerne la cellule en silicium de R.T.C France avec un diamètre de 57 mm qui a été très largement étudiée dans la littérature. Sa courbe caractéristique a été mesurée dans des conditions de température $T = \SI{33}{\celsius}$ et irradiance solaire $\SI{1000}{\watt\per\square\meter}$ et comprend 26 points expérimentaux dont 20 est dans le premier quadrant (figure \ref{fig:RTCexp}). Le tableau \ref{tab:singleboundaries} montre le bornes de l'espace de recherche et figure \ref{fig:RTCres} prouve que la caractéristique expérimentale et calculée par l'ED sont graphiquement quasi-identiques. Figure \ref{fig:RTCres}.b montre l'évolution de la moyenne des valeurs de fitness des vecteurs évalués par la fonction objectif dans chaque génération consécutive. On constate que dès la 50\textsuperscript{ème} génération, l'ED a pratiquement déjà convergé.
+  Ce premier cas d'étude concerne la cellule en silicium de R.T.C France avec un diamètre de 57 mm qui a été très largement étudiée dans la littérature. Sa courbe caractéristique a été mesurée dans des conditions de température $T = \SI{33}{\celsius}$ et irradiance solaire $\SI{1000}{\watt\per\square\meter}$ et comprend 26 points expérimentaux dont 20 est dans le premier quadrant. %(figure \ref{fig:RTCexp}). 
+
+\subsubsection{Simple diode}
+
+Le tableau \ref{tab:singleboundaries} montre le bornes de l'espace de recherche et figure \ref{fig:RTCres} prouve que la caractéristique expérimentale et calculée par l'ED sont graphiquement quasi-identiques. Figure \ref{fig:RTCres}.b montre l'évolution de la moyenne des valeurs de fitness des vecteurs évalués par la fonction objectif dans chaque génération consécutive. On constate que dès la 50\textsuperscript{ème} génération, l'ED a pratiquement déjà convergé.
 
 Le tableau \ref{tab:RTCres} présente une comparaison entre l'ED et d'autre méthodes simple diode appliquées à la cellule R.T.C France. On constate que les valeurs retrouvées par l'ED sont assez proches de celles des autres travaux. En effet, l'ED parvient à une erreur RMSE de \num{7.7692e-04} qui est supérieure aux autres techniques similaire comme les essaims particulaires \cite{Hamid2016}, l'algorithme des colonies d'abeilles artificielles \cite{Oliva2014} et l'ED à trois points \cite{Chin2019}. Les résultats les moins précis sont ceux de la méthode de Newton à moindres carrés \cite{Easwarakhanthan1986} et l'algorithme génétique \cite{Oliva2014}.
 
@@ -26,13 +30,13 @@ Le tableau \ref{tab:RTCres} présente une comparaison entre l'ED et d'autre mét
   \end{center}
 \end{table}
 
-\begin{figure}
-  \begin{center}
-    \includegraphics[width=0.5\textwidth]{resources/RTCFrance/exp.png}
-    \caption{Données expérimentales de la caractéristique IV de la cellule R.T.C France mesurées à \SI{33}{\celsius}}
-    \label{fig:RTCexp}
-  \end{center}
-\end{figure}
+% \begin{figure}
+%   \begin{center}
+%     \includegraphics[width=0.5\textwidth]{resources/RTCFrance/exp.png}
+%     \caption{Données expérimentales de la caractéristique IV de la cellule R.T.C France mesurées à \SI{33}{\celsius}}
+%     \label{fig:RTCexp}
+%   \end{center}
+% \end{figure}
 
 \begin{figure*}
     \centering
@@ -45,7 +49,7 @@ Le tableau \ref{tab:RTCres} présente une comparaison entre l'ED et d'autre mét
         \includegraphics[width=\textwidth]{resources/RTCFrance/singled/fitness.png}
         \caption{Évolution de la valeur moyenne de fitness de chaque génération}
     \end{subfigure}
-    \caption{Résultats de l'ED appliquée sur la cellule R.T.C France 57 mm.}
+    \caption{Résultats de l'ED appliquée sur la cellule R.T.C France 57 mm avec le modèle simple}
     \label{fig:RTCres}
 \end{figure*}
 
@@ -73,7 +77,23 @@ Le tableau \ref{tab:RTCres} présente une comparaison entre l'ED et d'autre mét
 \nomenclature{ED3P}{Évolution différentielle à trois points}
 \nomenclature{ABC}{Colonies d'abeilles artificielles (\textit{Artificial Bee Colony Optimization})}
 
-En ce qui concerne le modèle double diode, les paramètres sont contraints dans les limites dans le tableau \ref{tab:doubledboundaries}. Les résultats de l'ED en double diode sont comparés avec ceux de quelques autres méthode dans le tableau \ref{tab:RTCresdouble}.
+\subsubsection{Double diode}
+
+En ce qui concerne le modèle double diode, les paramètres sont contraints dans les limites dans le tableau \ref{tab:doubledboundaries}. La courbe caractéristique obtenue par le modèle double diode est montrée dans la figure \ref{fig:RTCdoublecarac} Les résultats de l'ED en double diode sont comparés avec ceux de quelques autres méthode dans le tableau \ref{tab:RTCresdouble}. La lenteur relative de la convergence du modèle double diode (nécessitant environ 100 générations) par rapport avec le simple diode, qui converge en moins de 50 générations, est due au nombre de paramètres supérieur du double diode ($D = 7$). Toutefois, le gain en précision est marginal puisque la RMSE du simple diode (\num{7.7692e-04}) est très proche de celle du double diode (\num{7.63e-04}). Le modèle simple diode est donc supérieur grâce à son efficacité en termes de temps de calcul.
+\begin{figure*}
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{resources/RTCFrance/doubled/iv.png}
+        \caption{Comparaison entre la courbe expérimentale et la caractéristique calculée.}
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{resources/RTCFrance/doubled/fitness.png}
+        \caption{Évolution de la valeur moyenne de fitness de chaque génération}
+    \end{subfigure}
+    \caption{Résultats de l'ED appliquée sur la cellule R.T.C France 57 mm avec le modèle double diode.}
+    \label{fig:RTCdoublecarac}
+\end{figure*}
 \begin{table}
   \caption{Bornes de l'espace de recherche à 7 dimensions pour la cellule R.T.C France 57mm}
   \label{tab:doubledboundaries}
@@ -118,7 +138,11 @@ En ce qui concerne le modèle double diode, les paramètres sont contraints dans
 
 \subsection{Cas 2: Module monocristallin Schutten Solar STM6-40/36}
 
-Nous nous concernons dans ce deuxième cas d'étude du module monocristallin Schutten Solar STM6-40/36 composé de 36 cellules ($156\si{\milli\meter}\times 156\si{\milli\meter}$) en série. Les données expérimentales ont été prises à une température de 51\si{\celsius}. Une comparaison des résultats de l'ED avec d'autres méthodes est présentée dans le tableau \ref{tab:stm6}. La correspondance de la caractéristique calculée par l'ED aux points experimentaux est démontrée graphiquement dans la figure \ref{fig:STM6res}. Malgré la distribution irrégulière des points, l'ED arrive a produire une solution précise. Sa précision et de même ordre de grandeur que ED3P \cite{Chin2019} mais elle est supérieure aux techniques des colonies des abeilles artificielles (ABC) \cite{Oliva2014}, de sa version améliorée par Oliva et al. (CIABC) \cite{Oliva2017a} et Chaotic Whale Optimization Algorithm (CWOA) \cite{Oliva2017}.
+Nous nous concernons dans ce deuxième cas d'étude du module monocristallin Schutten Solar STM6-40/36 composé de 36 cellules ($156\si{\milli\meter}\times 156\si{\milli\meter}$) en série. Les données expérimentales ont été prises à une température de 51\si{\celsius} et des conditions d'irradiation de $1000 \si{\watt\per\square\meter}$. Les données expérimentales sont 18 points dans la majorité se retrouve dans les régions de puissance maximale et court-circuit.
+
+\subsubsection{Simple diode}
+
+Une comparaison des résultats de l'ED à simple diode avec d'autres méthodes est présentée dans le tableau \ref{tab:stm6}. La correspondance de la caractéristique calculée par l'ED aux points expérimentaux est démontrée graphiquement dans la figure \ref{fig:STM6res}. Malgré la distribution irrégulière des points, l'ED arrive à produire une solution précise. Sa précision et de même ordre de grandeur que ED3P \cite{Chin2019} mais elle est supérieure aux techniques des colonies des abeilles artificielles (ABC) \cite{Oliva2014}, de sa version améliorée par Oliva et al. (CIABC) \cite{Oliva2017a} et Chaotic Whale Optimization Algorithm (CWOA) \cite{Oliva2017}.
 \begin{figure*}
     \centering
     \begin{subfigure}[b]{0.45\textwidth}
@@ -130,9 +154,9 @@ Nous nous concernons dans ce deuxième cas d'étude du module monocristallin Sch
         \includegraphics[width=\textwidth]{resources/STM6/singled/fitness.png}
         \caption{Évolution de la valeur moyenne de fitness de chaque génération. L'ED est convergeante dès la $50^{\text{ème}}$ itération.}
     \end{subfigure}
-    \caption{Résultats de l'ED appliquée sur au module Schutten Solar STM6-40/36}
+    \caption{Résultats de l'ED simple diode appliquée sur au module Schutten Solar STM6-40/36}
     \label{fig:STM6res}
-\end{figure*}
+\end{figure*}%
 \begin{table}
   \caption{Comparaison de l'ED (simple diode) avec d'autres méthodes dans la littérature sur le module STM6-40/36}
   \label{tab:stm6}
@@ -155,8 +179,22 @@ Nous nous concernons dans ce deuxième cas d'étude du module monocristallin Sch
 \nomenclature{CIABC}{Chaotic Improved Artificial Bee Colony}
 \nomenclature{CWOA}{Chaotic Whale Optimization Algorithm}
 
-
-Les résultats de l'ED avec le modèle double diode sur le module STM6-40/36 sont présenté dans le tableau \ref{tab:STM6double} avec deux autres techniques: La colonie d'abeilles artificielle et les essaims particulaires. Le tableau \ref{tab:stm6doublelimits} montre les bornes utilisées comme limites de l'espace de recherche. Notons la similarité des qualités des résultats du modèle simple et double diode.
+\subsubsection{Double diode}
+Les courbes caractéristique et de convergence résultantes du modèle double diode sur le module STM6-40/36 sont montrées dans la figure \ref{fig:STMdoublecarac}. Les paramètres retrouvées par l'ED sont présenté dans le tableau \ref{tab:STM6double} avec deux autres techniques: La colonie d'abeilles artificielle et les essaims particulaires. Le tableau \ref{tab:stm6doublelimits} montre les bornes utilisées comme limites de l'espace de recherche. Notons la similarité des qualités des résultats du modèle simple et double diode. Le modèle double diode donnent des resultats aussi précis que le simple diode (\num{1.7724e-03} contre \num{1.7721e-03} pour l'ED simple diode) et les deux modèles convergent de manières très similaires.
+\begin{figure*}
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{resources/STM6/doubled/iv.png}
+        \caption{Correspondence de l'ED aux données expérimentales.}
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{resources/STM6/doubled/fitness.png}
+        \caption{Évolution de la valeur moyenne de fitness de chaque génération.}
+    \end{subfigure}
+    \caption{Résultats de l'ED double diode appliquée au module Schutten Solar STM6-40/36}
+    \label{fig:STMdoublecarac}
+\end{figure*}%
 \begin{table}
   \caption{Limites de l'espace de recherche pour l'ED double diode sur le module photovoltaïque STM6-40/36}
   \label{tab:stm6doublelimits}
@@ -196,21 +234,10 @@ Les résultats de l'ED avec le modèle double diode sur le module STM6-40/36 son
 
 \subsection{Cas 3: Module polycristallin Photowatt-PWP 201}
 
-\begin{figure*}
-    \centering
-    \begin{subfigure}[b]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{resources/pwp/iv.png}
-        \caption{Caractéristique expérimentale et calculée du module polycristallin Photowatt-PWP 201.}
-    \end{subfigure}
-    ~
-    \begin{subfigure}[b]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{resources/pwp/fitness.png}
-        \caption{Courbe de convergence de L'ED. Notons la convergence rapide (avant $< 100$ itérations)}
-    \end{subfigure}
-    \caption{Résultats de l'ED appliquée sur au module Photowatt PWP-201}
-    \label{fig:pwpsingle}
-\end{figure*}
-Le 3\textsuperscript{ème} cas concerne le module polycristallin Photowatt-PWP 201 composé de 36 cellules en série. Les données expérimentales ont été prise dans des conditions d'irradiation de $1000 \si{\watt\per\square\meter}$ et une température de $T = 45 \si{\celsius}$. Le tableau \ref{tab:pwpsingle} compare les résultats obtenus par Évolution Différentielle contre d'autres méthodes dans la littérature. Les valeurs des paramètres simple diode retrouvée par l'ED sont très similaires aux autres, mais sont plus précises en termes de RMSE. Figure \ref{fig:pwpsingle} montre la courbe caractéristique calculée (a) et la courbe de convergence de l'ED (b). Les bornes de l'espace de recherche sont identiques à celle de la cellule R.T.C France (Tableau \ref{tab:singleboundaries}) sauf pour le courant de saturation qu'on limite à $\num{1e-7} \leq I_{0} \leq \num{1e-5}$. Le modèle double diode est plus précis que le modèle simple diode avec l'ED, mais ce dernier reste plus précis avec l'ED que les autres techniques utilisant le modèle simple diode.
+Le 3\textsuperscript{ème} cas concerne le module polycristallin Photowatt-PWP 201 composé de 36 cellules en série. Les données expérimentales ont été prise dans des conditions d'irradiation de $1000 \si{\watt\per\square\meter}$ et une température de $T = 45 \si{\celsius}$. Pour ce cas d'étude on dispose de 25 points expérimentaux assez bien distribué dans le premier quadrant.
+
+\subsubsection{Modèle simple diode}
+Le tableau \ref{tab:pwpsingle} compare les résultats obtenus par Évolution Différentielle contre d'autres méthodes simple diode dans la littérature. Les valeurs des paramètres simple diode retrouvée par l'ED sont très similaires aux autres, mais sont plus précises en termes de RMSE. Figure \ref{fig:pwpsingle} montre la courbe caractéristique calculée (a) et la courbe de convergence de l'ED (b). Les bornes de l'espace de recherche sont identiques à celle de la cellule R.T.C France (Tableau \ref{tab:singleboundaries}) sauf pour le courant de saturation qu'on limite à $\num{1e-7} \leq I_{0} \leq \num{1e-5}$.
 
 \begin{table}
   \caption{Comparaison de l'ED avec d'autres méthodes simple diode dans la littérature sur le module Photowatt-PWP 201}
@@ -230,7 +257,38 @@ Le 3\textsuperscript{ème} cas concerne le module polycristallin Photowatt-PWP 2
        \hline
     \end{tabular*}
   \end{center}
-\end{table}
+\end{table}%
+\begin{figure*}
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{resources/pwp/iv.png}
+        \caption{Caractéristique expérimentale et calculée du module polycristallin Photowatt-PWP 201.}
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{resources/pwp/fitness.png}
+        \caption{Courbe de convergence de L'ED. Notons la convergence rapide (avant $< 100$ itérations)}
+    \end{subfigure}
+    \caption{Résultats de l'ED simple diode appliquée sur au module Photowatt PWP-201}
+    \label{fig:pwpsingle}
+\end{figure*}
+
+\subsubsection{Modèle double diode}
+Les bornes des deux facteurs d'idéalité et des deux courants de saturation sont identiques à celles du modèle simple diode. Figure \ref{fig:pwpdoublecarac} montre la courbe caractéristique IV et la convergence de l'ED avec double diode. Le tableau \ref{tab:pwpdouble} compare l'ED à double diode avec la technique d'essaims particulaires de Jordehi 2016 \textit{Time Varrying Acceleration Coefficients PSO} \cite{Jordehi2016}. Le modèle double diode est plus précis que la méthode TVACPSO \nomenclature{TVACPSO}{Time Varrying Acceleration Coefficients PSO} et l'ED à simple diode avec une RMSE de \num{1.50208e-03} et converge même dans moins d'itérations. Le modèle double diode est donc supérieur dans le cas du module Photowatt-PWP 201.
+\begin{figure*}
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{resources/pwp/doubled/iv.png}
+        \caption{Caractéristique expérimentale et calculée du module polycristallin Photowatt-PWP 201.}
+    \end{subfigure}
+    ~
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{resources/pwp/doubled/fitness.png}
+        \caption{Courbe de convergence de L'ED. Notons la convergence rapide (avant $< 100$ itérations)}
+    \end{subfigure}
+    \caption{Résultats de l'ED double diode appliquée sur au module Photowatt PWP-201}
+    \label{fig:pwpdoublecarac}
+\end{figure*}%
 \begin{table}
   \caption{Comparaison de l'ED avec d'autres méthodes double diode sur le module photovoltaïque Photowatt-PWP 201}
   \label{tab:pwpdouble}
