@@ -46,7 +46,7 @@ On voit dans la figure \ref{fig:idealcell}.b que la courbe caractéristique conn
       \begin{circuitikz}[american currents, line width = 1pt]
       \draw (0, 0) to[I, l=$I_{PV}$] (0, 3) -- (2,3) to[short, i=$I$] (4,3);
       \draw (4,3) to[open, v^<=$V_{out}$, o-o] (4,0);
-      \draw (0, 0) -- (4, 0);
+      \draw (0, 0) -- (3.96, 0);
       \draw (1.5, 3) to[D, i>^=$I_D$] (1.5, 0); 
       \end{circuitikz}
       }
@@ -90,7 +90,7 @@ L'une des limites de ce modèle provient de son imprécision lorsque la cellule 
     \draw (7,3) to[open, v^<=$V_{out}$, o-o] (7,0);
     \draw (1.5, 3) to[D, i>^=$I_D$] (1.5, 0);
     \draw (3, 3) to[R=$R_{p}$] (3, 0);
-    \draw (0, 0) -- (7, 0);
+    \draw (0, 0) -- (6.96, 0);
     \end{circuitikz}}
     \shorthandon{:!}
     \caption{Modèle Simple Diode}
@@ -121,7 +121,7 @@ Il est évident que l'addition d'une autre diode complique considérablement le 
       \draw (3, 3) to[D, i>^=$I_{D2}$] (3, 0);
       \draw (4.5, 3) to[R=$R_{p}$] (4.5, 0);
       \draw (7,3) to[open, v^<=$V_{out}$, o-o] (7,0);
-      \draw (0, 0) -- (7, 0);
+      \draw (0, 0) -- (6.96, 0);
     \end{circuitikz}}
     \shorthandon{:!}
     \caption{Le modèle double diode}
