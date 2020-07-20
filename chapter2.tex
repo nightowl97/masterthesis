@@ -62,9 +62,9 @@ $V_{\text{min},j}$ et $V_{\text{max},j}$ sont les bornes inférieures   et supé
 \clearpage
 
 \subsection{Mutation}
-\nomenclature[1vbase]{$\vec{V}_{base}$}{Vecteur de base}
-\nomenclature[1vmut]{$\vec{M}_{i}$}{Vecteur mutant}
-\nomenclature[1vessai]{$\vec{T}_{i}$}{Vecteur d'essai}
+\nomenclature[vbase]{$\vec{V}_{base}$}{Vecteur de base}
+\nomenclature[vmut]{$\vec{M}_{i}$}{Vecteur mutant}
+\nomenclature[vessai]{$\vec{T}_{i}$}{Vecteur d'essai}
 
 Après l'initialisation de la population, l'ED modifie, croise et recombine la population pour produire des vecteurs d'essai (un nombre $N_P$ de ces vecteurs) qui seront comparés avec les vecteurs cibles qui leurs correspondent dans la population. La \textit{Mutation} dans l'ED est en fait une "mutation différentielle". Elle consiste à ajouter la différence de deux vecteurs choisis aléatoirement de la population, multipliée par un facteur de pondération ou "Facteur de Mutation", à un troisième vecteur de base distinct. Cette opération produit un vecteur mutant $M$ selon l'équation \ref{eq:mutant}. L'indice $i$ indique le $i$-ème vecteur de la population, et $gen$ la génération où l'on est. 
 Il n'y a pas de limite dure sur le Facteur de Mutation $F$, mais les valeurs supérieures à $1$ sont rarement considérées. Dans notre cas, on considère que $F \in [0, 1]$. Il existe plusieurs stratégies pour choisir le $\vec{V}_{base}$, le seul prérequis étant qu'il soit distinct du vecteur cible. Dans ce travail nous utiliserons exclusivement le choix du vecteur ayant la meilleure qualité ou valeur de "fitness" calculée par la fonction objectif. Les vecteurs de la différence $\vec{V}_{r1,gen}$ et $V_{r2,gen}$ sont choisis aléatoirement de la population pour chaque vecteur mutant et ne doivent qu'être distincts l'un de l'autre et des vecteurs cible $\vec{V}_{i, gen}$ et de base $\vec{V}_{base, gen}$.

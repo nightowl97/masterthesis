@@ -85,7 +85,7 @@
 
 % float and table spacing
 \setlength{\floatsep}{1pt}
-\setlength{\textfloatsep}{5pt}
+\setlength{\textfloatsep}{15pt}
 \captionsetup[table]{belowskip=5pt}
 \captionsetup[table]{aboveskip=-10pt}
 
@@ -94,14 +94,14 @@
 
 %   \renewcommand{\theFancyVerbLine}{\sffamily\textcolor[rgb]{0.5,0.5,0.5}{\scriptsize\arabic{FancyVerbLine}}}
 
-  \include{titlepage}
+  \input{titlepage}
   \shipout\null
-  \include{introduction}
-  \include{chapter1}
-  \include{chapter2}
-  \include{chapter3}
-  \include{chapter4}
-  \include{conclusion}
+  \input{introduction}
+  \input{chapter1}
+  \input{chapter2}
+  \input{chapter3}
+  \input{chapter4}
+  \input{conclusion}
   \bibliographystyle{ieeetr}
   \bibliography{masterlibrary}
 \end{document}

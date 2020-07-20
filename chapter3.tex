@@ -59,7 +59,7 @@ La "\textit{fonction W}" de Lambert est définie comme l'inverse de la fonction 
 
 \begin{figure}[H]
   \begin{center}
-    \includegraphics[width=.6\textwidth]{resources/lambertw.png}
+    \includegraphics[width=.8\textwidth]{resources/lambertw.png}
     \caption{Les deux branches réelles de $W(x)$ lorsque $x$ est réel}
     \label{fig:lambertw}
   \end{center}
@@ -112,12 +112,12 @@ Le modèle double diode (équation \ref{eq:doublediode}) contient un terme expon
 
 \section{Utilisation de l'outil \textit{DEPV}}
 
-\nomenclature{$F$}{Facteur de mutation}
-\nomenclature{$CR$}{Taux de croisement}
-\nomenclature{$N_P$}{Taille de la population}
+\nomenclature[F]{$F$}{Facteur de mutation}
+\nomenclature[CR]{$CR$}{Taux de croisement}
+\nomenclature[Np]{$N_P$}{Taille de la population}
 \nomenclature{DEPV}{Differential Evolution for Photovoltaics}
-\nomenclature{$Gen_{max}$}{Nombre maximal de générations}
-\nomenclature{$D$}{Dimensions de l'espace de recherche}
+\nomenclature[Genmax]{$Gen_{max}$}{Nombre maximal de générations}
+\nomenclature[D]{$D$}{Dimensions de l'espace de recherche}
 
 Dans ce projet, nous avons développé une bibliothèque en Python appelée \textit{DEPV} fournissant une interface permettant de lancer des calculs avec la technique de l'ED sur n'importe quelles cellule, à condition d'avoir accès aux données expérimentales. On fournit la fonction \pyth{read_csv()} qui permet à l'utilisateur d'extraire les points expérimentaux de la caractéristique IV (voltage en abscisses et courant en ordonnées) à partir d'un fichier .txt ou .csv. Nous fournissons aussi une classe \pyth{DE} qui gère tous les calculs. Il suffit de lui donner les paramètres nécessaires tel que les bornes de l'espace de recherche et le fichier contenant les données expérimentales. Pour plus de contrôle sur les paramètres de l'algorithme, la classe \pyth{DE} expose plusieurs variables à travers son "constructeur". Le prototype de la fonction constructrice ou \pyth{__init__()} de la classe \pyth{DE} est le suivant:
 
